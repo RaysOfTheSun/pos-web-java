@@ -1,9 +1,28 @@
 package com.raysofthesun.poswebjava.propose.controllers;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
+import com.raysofthesun.poswebjava.propose.services.ProposalService;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/propose/proposal")
+@RequestMapping("/propose")
 public class ProposalController {
+
+	final protected ProposalService proposalService;
+
+	public ProposalController(ProposalService proposalService) {
+		this.proposalService = proposalService;
+	}
+
+	@PutMapping("/agents/{agentId}/proposals")
+	public Mono<String> createProposal(@PathVariable String agentId, @RequestBody Proposal proposal) {
+		return proposalService.createProposalWithAgentId(agentId, proposal);
+	}
+
+	@GetMapping("/agents/{agentId}/proposals")
+	public Flux<Proposal> getProposalsByAgentId(@PathVariable String agentId) {
+		return proposalService.getProposalsByAgentId(agentId);
+	}
 }

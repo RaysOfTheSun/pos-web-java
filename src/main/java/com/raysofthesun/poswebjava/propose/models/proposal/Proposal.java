@@ -12,6 +12,7 @@ public class Proposal {
 	private String name;
 	private String creationDate = Instant.now().toString();
 
+	private String agentId;
 	private String ownerId;
 	private String insuredId;
 	private List<String> dependentIds;

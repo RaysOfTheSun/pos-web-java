@@ -25,4 +25,9 @@ public class ProposalController {
 	public Flux<Proposal> getProposalsByAgentId(@PathVariable String agentId) {
 		return proposalService.getProposalsByAgentId(agentId);
 	}
+
+	@PostMapping("/agents/{agentId}/proposals/{proposalId}/finalize")
+	public Mono<?> finalizeProposal(@PathVariable String agentId, @PathVariable String proposalId) {
+		return proposalService.finalizeProposal(agentId, proposalId);
+	}
 }

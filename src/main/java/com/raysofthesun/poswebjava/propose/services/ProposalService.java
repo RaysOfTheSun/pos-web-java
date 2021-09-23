@@ -2,6 +2,8 @@ package com.raysofthesun.poswebjava.propose.services;
 
 import com.raysofthesun.poswebjava.propose.clients.applications.ApplyApplicationApi;
 import com.raysofthesun.poswebjava.propose.clients.applications.models.application.Application;
+import com.raysofthesun.poswebjava.propose.constants.CannotFinalizeProposalException;
+import com.raysofthesun.poswebjava.propose.constants.CannotFindProposalException;
 import com.raysofthesun.poswebjava.propose.constants.ProposalStatus;
 import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
 import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
@@ -34,7 +36,7 @@ public class ProposalService {
 	public Mono<Application> finalizeProposal(String agentId, String proposalId) {
 		return proposalRepository
 				.findByAgentIdAndId(agentId, proposalId)
-				.switchIfEmpty(Mono.error(new RuntimeException("PROPOSAL NOT FOUND")))
+				.switchIfEmpty(Mono.error(new CannotFindProposalException(proposalId)))
 				.flatMap(this::makeFinalizedProposal)
 				.flatMap((finalizedProposal) -> applyApplicationApi.createApplication(finalizedProposal, agentId));
 	}
@@ -49,7 +51,7 @@ public class ProposalService {
 
 	protected Mono<Proposal> makeFinalizedProposal(Proposal proposalToFinalize) {
 		return canProposalBeFinalized(proposalToFinalize)
-				.switchIfEmpty(Mono.error(new RuntimeException("CANNOT FINALIZE PROPOSAL WITH AN INVALID STATUS")))
+				.switchIfEmpty(Mono.error(new CannotFinalizeProposalException(proposalToFinalize)))
 				.map((proposal -> {
 					proposal.setStatus(ProposalStatus.CONVERTED);
 					return proposal;

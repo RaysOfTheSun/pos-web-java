@@ -1,15 +1,13 @@
 package com.raysofthesun.poswebjava.apply.models.application;
 
 import com.raysofthesun.poswebjava.apply.constants.ApplicationStatus;
-import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
-import lombok.Builder;
+import com.raysofthesun.poswebjava.apply.models.insured.Insured;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Data
 @Document("applications")
@@ -18,40 +16,54 @@ public class ApplicationMeta {
 	private ApplicationMeta() {
 	}
 
-	public static ApplicationMetaBuilder create(Proposal proposal) {
-		return ApplicationMetaBuilder.createFromProposal(proposal);
+	public static Builder create(Application application) {
+		return Builder.fromApplication(application);
 	}
 
-	private String id = UUID.randomUUID().toString();
+	private String id;
+
 	private String name;
-	private String creationDate = Instant.now().toString();
-	private ApplicationStatus status = ApplicationStatus.IN_PROGRESS;
 
 	private String ownerId;
+
 	private String insuredId;
+
+	private String customerId;
+
 	private List<String> dependentIds = new ArrayList<>();
 
-	private ApplicationPaymentInfo paymentInfo = new ApplicationPaymentInfo();
+	private String creationDate;
 
-	public static class ApplicationMetaBuilder {
+	private ApplicationStatus status;
 
-		private final ApplicationMeta applicationMeta;
+	private ApplicationPaymentInfo paymentInfo;
 
-		private ApplicationMetaBuilder() {
-			applicationMeta = new ApplicationMeta();
+	public static class Builder {
+		private final ApplicationMeta meta = new ApplicationMeta();
+
+		private Builder(Application application) {
+			meta.setId(application.getId());
+			meta.setName(application.getName());
+			meta.setStatus(application.getStatus());
+			meta.setCustomerId(application.getOwner().getId());
+			meta.setPaymentInfo(application.getPaymentInfo());
+			meta.setCreationDate(application.getCreationDate());
+			meta.setDependentIds(getIdsFromInsureds(application.getDependents()));
 		}
 
-		private ApplicationMetaBuilder(Proposal proposal) {
-			this();
-			applicationMeta.setName(proposal.getName());
+		private List<String> getIdsFromInsureds(List<Insured> insureds) {
+			return insureds
+					.stream()
+					.map(Insured::getId)
+					.collect(Collectors.toList());
 		}
 
-		public static ApplicationMetaBuilder createFromProposal(Proposal proposal) {
-			return new ApplicationMetaBuilder(proposal);
+		public static Builder fromApplication(Application application) {
+			return new Builder(application);
 		}
 
 		public ApplicationMeta build() {
-			return applicationMeta;
+			return meta;
 		}
 	}
 }

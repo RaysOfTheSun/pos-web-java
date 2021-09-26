@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
+
 @Service
 public class CustomerService {
 
@@ -25,6 +27,12 @@ public class CustomerService {
 		return associateCustomerWithAgent$
 				.flatMap(customerRepository::save)
 				.map(Customer::getId);
+	}
+
+	public Flux<Customer> getCustomersByIdWithAgentId(String agentId, Collection<String> customerIds) {
+		return customerRepository
+				.findByAgentIdAndIdIn(agentId, customerIds)
+				.switchIfEmpty(Flux.error(new RuntimeException("CANNOT FIND CUSTOMER")));
 	}
 
 	public Flux<Customer> getAllCustomersWithAgentId(String agentId) {

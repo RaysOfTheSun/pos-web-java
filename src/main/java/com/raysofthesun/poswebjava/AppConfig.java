@@ -1,8 +1,10 @@
 package com.raysofthesun.poswebjava;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.reactivestreams.client.MongoClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.mongodb.ReactiveMongoDatabaseFactory;
 import org.springframework.data.mongodb.core.ReactiveMongoClientFactoryBean;
 import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
 

@@ -1,7 +1,7 @@
-package com.raysofthesun.poswebjava.apply.models.insured;
+package com.raysofthesun.poswebjava.propose.feign_cients.applications.models.insured;
 
 import com.raysofthesun.poswebjava.apply.constants.InsuredRole;
-import com.raysofthesun.poswebjava.apply.models.person.Person;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.person.Person;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -10,8 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("insureds")
 @EqualsAndHashCode(callSuper = true)
 public class Insured extends Person {
-	String customerId;
 	InsuredRole role;
+	String customerId;
 
 	InsuredPhysicalInfo physicalInfo;
 	InsuredIdentificationInfo identificationInfo;

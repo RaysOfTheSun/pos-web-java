@@ -1,12 +1,14 @@
 package com.raysofthesun.poswebjava.propose.services;
 
-import com.raysofthesun.poswebjava.propose.clients.applications.ApplyApplicationApi;
-import com.raysofthesun.poswebjava.propose.clients.applications.models.application.Application;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.ApplyApplicationApi;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.Application;
 import com.raysofthesun.poswebjava.propose.constants.CannotFinalizeProposalException;
 import com.raysofthesun.poswebjava.propose.constants.CannotFindProposalException;
 import com.raysofthesun.poswebjava.propose.constants.ProposalStatus;
-import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
+import com.raysofthesun.poswebjava.propose.mappers.ProposalMapper;
+import com.raysofthesun.poswebjava.propose.models.Proposal;
 import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
+import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -16,7 +18,8 @@ public class ProposalService {
 	protected final ProposalRepository proposalRepository;
 	protected final ApplyApplicationApi applyApplicationApi;
 
-	public ProposalService(ProposalRepository proposalRepository, ApplyApplicationApi applyApplicationApi) {
+	public ProposalService(ProposalRepository proposalRepository, ApplyApplicationApi applyApplicationApi,
+	                       SimpleReactiveMongoDatabaseFactory reactiveMongoDatabaseFactory) {
 		this.proposalRepository = proposalRepository;
 		this.applyApplicationApi = applyApplicationApi;
 	}
@@ -38,6 +41,7 @@ public class ProposalService {
 				.findByAgentIdAndId(agentId, proposalId)
 				.switchIfEmpty(Mono.error(new CannotFindProposalException(proposalId)))
 				.flatMap(this::makeFinalizedProposal)
+				.map(ProposalMapper.PROPOSAL_MAPPER::proposalToApplicationCreationRequest)
 				.flatMap((finalizedProposal) -> applyApplicationApi.createApplication(finalizedProposal, agentId));
 	}
 

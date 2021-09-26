@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.constants;
 
-import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
+import com.raysofthesun.poswebjava.propose.models.Proposal;
 
 public class CannotFinalizeProposalException extends RuntimeException {
 	public CannotFinalizeProposalException(Proposal proposal) {

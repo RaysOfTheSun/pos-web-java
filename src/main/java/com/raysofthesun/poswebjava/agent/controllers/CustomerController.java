@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Collection;
+import java.util.List;
+
 @RestController
 @RequestMapping("/agents")
 public class CustomerController {
@@ -29,5 +32,10 @@ public class CustomerController {
 	@DeleteMapping("/{agentId}/customers/{customerId}")
 	public Mono<Boolean> deleteCustomerByIdAndAgentId(@PathVariable String agentId, @PathVariable String customerId) {
 		return customerService.deleteCustomerByIdAndAgentId(agentId, customerId);
+	}
+
+	@GetMapping("/{agentId}/customers/customer")
+	public Flux<Customer> getCustomersWithIds(@PathVariable String agentId, @RequestParam List<String> ids) {
+		return customerService.getCustomersByIdWithAgentId(agentId, ids);
 	}
 }

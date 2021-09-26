@@ -1,7 +1,7 @@
-package com.raysofthesun.poswebjava.apply.models.person;
+package com.raysofthesun.poswebjava.propose.feign_cients.applications.models.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.raysofthesun.poswebjava.apply.models.person.personalinfo.PersonalInfo;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.person.personalinfo.PersonalInfo;
 import lombok.Data;
 
 import java.util.UUID;
@@ -11,5 +11,5 @@ public class Person {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String id = UUID.randomUUID().toString();
 
-	private PersonalInfo personalInfo = new PersonalInfo();
+	private PersonalInfo personalInfo;
 }

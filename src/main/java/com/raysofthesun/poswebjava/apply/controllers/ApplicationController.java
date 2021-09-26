@@ -1,12 +1,9 @@
 package com.raysofthesun.poswebjava.apply.controllers;
 
-import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
+import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationRequest;
+import com.raysofthesun.poswebjava.apply.models.application.Application;
 import com.raysofthesun.poswebjava.apply.services.ApplicationService;
-import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -18,8 +15,9 @@ public class ApplicationController {
 	}
 
 	@PostMapping("/agents/{agentId}/applications/create")
-	public Mono<ApplicationMeta> createApplicationFromProposal(@RequestBody Proposal proposal) {
-		return applicationService.createApplicationMetaFromProposal(proposal);
+	public Mono<Application> createApplicationFromProposal(@PathVariable String agentId,
+	                                                       @RequestBody ApplicationCreationRequest request) {
+		return applicationService.createApplicationWithRequestAndAgentId(request, agentId);
 	}
 
 }

@@ -1,9 +1,9 @@
 package com.raysofthesun.poswebjava.propose.controllers;
 
-import com.raysofthesun.poswebjava.propose.clients.ApplyClients;
-import com.raysofthesun.poswebjava.propose.clients.applications.ApplyApplicationApi;
-import com.raysofthesun.poswebjava.propose.clients.applications.models.application.Application;
-import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
+import com.raysofthesun.poswebjava.propose.feign_cients.FeignClients;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.ApplyApplicationApi;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.Application;
+import com.raysofthesun.poswebjava.propose.models.Proposal;
 import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
 import com.raysofthesun.poswebjava.propose.services.ProposalService;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 
 @WebFluxTest({ProposalController.class})
 @ExtendWith(MockitoExtension.class)
-@Import({ProposalRepository.class, ApplyClients.class, ProposalService.class})
+@Import({ProposalRepository.class, FeignClients.class, ProposalService.class})
 @DisplayName("ProposalController")
 public class ProposalControllerTests {
 

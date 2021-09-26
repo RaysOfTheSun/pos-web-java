@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.propose.controllers;
 
-import com.raysofthesun.poswebjava.propose.clients.applications.models.application.Application;
-import com.raysofthesun.poswebjava.propose.models.proposal.Proposal;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.Application;
+import com.raysofthesun.poswebjava.propose.models.Proposal;
 import com.raysofthesun.poswebjava.propose.services.ProposalService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

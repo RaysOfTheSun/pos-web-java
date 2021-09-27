@@ -52,11 +52,6 @@ public class Application {
 			return new Builder(request);
 		}
 
-		public Builder withName(String name) {
-			application.setName(name);
-			return this;
-		}
-
 		public Builder withOwner(Insured owner) {
 			application.setOwner(owner);
 			return this;

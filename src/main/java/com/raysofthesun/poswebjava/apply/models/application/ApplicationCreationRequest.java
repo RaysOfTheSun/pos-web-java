@@ -2,6 +2,7 @@ package com.raysofthesun.poswebjava.apply.models.application;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -16,5 +17,5 @@ public class ApplicationCreationRequest {
 
 	private String primaryInsuredId;
 
-	private List<String> dependentIds;
+	private List<String> dependentIds = new ArrayList<>();
 }

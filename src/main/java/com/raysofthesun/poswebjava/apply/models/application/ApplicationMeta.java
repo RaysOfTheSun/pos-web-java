@@ -20,6 +20,10 @@ public class ApplicationMeta {
 		return Builder.fromApplication(application);
 	}
 
+	public static Builder create() {
+		return Builder.createRaw();
+	}
+
 	private String id;
 
 	private String name;
@@ -41,6 +45,9 @@ public class ApplicationMeta {
 	public static class Builder {
 		private final ApplicationMeta meta = new ApplicationMeta();
 
+		private Builder() {
+		}
+
 		private Builder(Application application) {
 			meta.setId(application.getId());
 			meta.setName(application.getName());
@@ -56,6 +63,10 @@ public class ApplicationMeta {
 					.stream()
 					.map(Insured::getId)
 					.collect(Collectors.toList());
+		}
+
+		public static Builder createRaw() {
+			return new Builder();
 		}
 
 		public static Builder fromApplication(Application application) {

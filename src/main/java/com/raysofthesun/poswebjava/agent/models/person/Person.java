@@ -1,7 +1,6 @@
 package com.raysofthesun.poswebjava.agent.models.person;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.raysofthesun.poswebjava.agent.models.person.personalinfo.PersonalInfo;
 import lombok.Data;
 
 import java.util.UUID;

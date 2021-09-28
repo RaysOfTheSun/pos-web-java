@@ -11,5 +11,4 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @EqualsAndHashCode(callSuper = true)
 public class Agent extends Person {
 	private AgentJobInfo jobInfo;
-
 }

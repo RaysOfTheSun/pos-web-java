@@ -1,4 +1,4 @@
-package com.raysofthesun.poswebjava.apply.models.insured;
+package com.raysofthesun.poswebjava.apply.models.person;
 
 import com.raysofthesun.poswebjava.apply.constants.MeasurementUnit;
 import lombok.Data;

@@ -72,15 +72,20 @@ public class ApplicationService {
 	}
 
 	protected Flux<Insured> getInsuredsForApplicationByRequest(ApplicationCreationRequest request, String agentId) {
-		return Flux
-				.fromIterable(request.getDependentIds())
-				.mergeWith(Flux.just(request.getPolicyOwnerId(), request.getPrimaryInsuredId()))
-				.distinct()
+		return getCustomerIdsFromRequest(request)
 				.collectList()
 				.flatMap((customerIds) -> customerApi.getCustomersByIdAndAgentId(agentId, customerIds).collectList())
 				.flatMapMany(Flux::fromIterable)
 				.map(CustomerMapper.MAPPER::mapCustomerToInsured)
 				.map((insured -> assignRoleToInsuredByCreationRequest(request, insured)));
+	}
+
+	protected Flux<String> getCustomerIdsFromRequest(ApplicationCreationRequest request) {
+		return request.getDependentIds() != null
+				? Flux
+				.fromIterable(request.getDependentIds())
+				.mergeWith(Flux.just(request.getPolicyOwnerId(), request.getPrimaryInsuredId()))
+				: Flux.just(request.getPolicyOwnerId(), request.getPrimaryInsuredId());
 	}
 
 	protected Insured assignRoleToInsuredByCreationRequest(ApplicationCreationRequest request, Insured insured) {
@@ -92,7 +97,8 @@ public class ApplicationService {
 
 	protected InsuredRole getInsuredRoleByCreationRequest(ApplicationCreationRequest request, Insured insured) {
 		final boolean isPrimaryInsuredOwner = request.getPrimaryInsuredId().equals(request.getPolicyOwnerId());
-		final boolean isInsuredDependent = request.getDependentIds().contains(insured.getCustomerId());
+		final boolean isInsuredDependent = request.getDependentIds() != null &&
+				request.getDependentIds().contains(insured.getCustomerId());
 
 		if (isPrimaryInsuredOwner && insured.getCustomerId().equals(request.getPolicyOwnerId())) {
 			return InsuredRole.IO;

@@ -1,14 +1,11 @@
 package com.raysofthesun.poswebjava.propose.services;
 
+import com.raysofthesun.poswebjava.propose.constants.*;
 import com.raysofthesun.poswebjava.propose.feign_cients.applications.ApplyApplicationApi;
 import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.Application;
-import com.raysofthesun.poswebjava.propose.constants.CannotFinalizeProposalException;
-import com.raysofthesun.poswebjava.propose.constants.CannotFindProposalException;
-import com.raysofthesun.poswebjava.propose.constants.ProposalStatus;
 import com.raysofthesun.poswebjava.propose.mappers.ProposalMapper;
 import com.raysofthesun.poswebjava.propose.models.Proposal;
 import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
-import org.springframework.data.mongodb.core.SimpleReactiveMongoDatabaseFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -18,18 +15,21 @@ public class ProposalService {
 	protected final ProposalRepository proposalRepository;
 	protected final ApplyApplicationApi applyApplicationApi;
 
-	public ProposalService(ProposalRepository proposalRepository, ApplyApplicationApi applyApplicationApi,
-	                       SimpleReactiveMongoDatabaseFactory reactiveMongoDatabaseFactory) {
+	public ProposalService(ProposalRepository proposalRepository, ApplyApplicationApi applyApplicationApi) {
 		this.proposalRepository = proposalRepository;
 		this.applyApplicationApi = applyApplicationApi;
 	}
 
 	public Mono<String> createProposalWithAgentId(String agentId, Proposal proposal) {
-		proposal.setAgentId(agentId);
-
-		return proposalRepository
-				.save(proposal)
+		return Mono
+				.just(proposal)
+				.map((proposal1 -> {
+					proposal.setAgentId(agentId);
+					return proposal;
+				}))
+				.flatMap(proposalRepository::save)
 				.map(Proposal::getId);
+
 	}
 
 	public Flux<Proposal> getProposalsByAgentId(String agentId) {
@@ -42,7 +42,21 @@ public class ProposalService {
 				.switchIfEmpty(Mono.error(new CannotFindProposalException(proposalId)))
 				.flatMap(this::makeFinalizedProposal)
 				.map(ProposalMapper.PROPOSAL_MAPPER::proposalToApplicationCreationRequest)
-				.flatMap((finalizedProposal) -> applyApplicationApi.createApplication(finalizedProposal, agentId));
+				.flatMap((finalizedProposal) -> applyApplicationApi.createApplication(finalizedProposal, agentId))
+				.onErrorResume((throwable -> throwable instanceof ProposeApiException
+						? Mono.error(throwable)
+						: unFinalizeProposal(agentId, proposalId)
+						.flatMap((proposal -> Mono.error(new FailedToFinalizeProposalException(proposal))))));
+	}
+
+	protected Mono<Proposal> unFinalizeProposal(String agentId, String proposalId) {
+		return proposalRepository
+				.findByAgentIdAndId(agentId, proposalId)
+				.map(proposal -> {
+					proposal.setStatus(ProposalStatus.DRAFT);
+					return proposal;
+				})
+				.flatMap(proposalRepository::save);
 	}
 
 	protected Mono<Proposal> canProposalBeFinalized(Proposal proposal) {

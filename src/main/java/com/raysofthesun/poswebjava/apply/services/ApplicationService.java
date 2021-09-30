@@ -8,6 +8,7 @@ import com.raysofthesun.poswebjava.apply.models.application.Application;
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
 import com.raysofthesun.poswebjava.apply.models.insured.Insured;
 import com.raysofthesun.poswebjava.apply.repositories.ApplicationRepository;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -19,16 +20,20 @@ import java.util.stream.Collectors;
 public class ApplicationService {
 
 	protected final CustomerApi customerApi;
+	protected final RabbitTemplate rabbitTemplate;
 	protected final ApplicationRepository applicationRepository;
 
-	public ApplicationService(ApplicationRepository applicationRepository, CustomerApi customerApi) {
+	public ApplicationService(ApplicationRepository applicationRepository, CustomerApi customerApi,
+	                          RabbitTemplate rabbitTemplate) {
 		this.customerApi = customerApi;
+		this.rabbitTemplate = rabbitTemplate;
 		this.applicationRepository = applicationRepository;
 	}
 
 	public Mono<Application> createApplicationWithRequestAndAgentId(
 			ApplicationCreationRequest request, String agentId) {
-		return createApplicationWithRequest(request, agentId).flatMap(this::createApplicationMetaAndSave);
+		return createApplicationWithRequest(request, agentId)
+				.flatMap(this::createApplicationMetaAndSave);
 	}
 
 	protected Mono<Application> createApplicationMetaAndSave(Application application) {
@@ -81,11 +86,10 @@ public class ApplicationService {
 	}
 
 	protected Flux<String> getCustomerIdsFromRequest(ApplicationCreationRequest request) {
-		return request.getDependentIds() != null
-				? Flux
+		return Flux
 				.fromIterable(request.getDependentIds())
 				.mergeWith(Flux.just(request.getPolicyOwnerId(), request.getPrimaryInsuredId()))
-				: Flux.just(request.getPolicyOwnerId(), request.getPrimaryInsuredId());
+				.filterWhen((customerId) -> Mono.just(!customerId.isEmpty()));
 	}
 
 	protected Insured assignRoleToInsuredByCreationRequest(ApplicationCreationRequest request, Insured insured) {
@@ -97,8 +101,7 @@ public class ApplicationService {
 
 	protected InsuredRole getInsuredRoleByCreationRequest(ApplicationCreationRequest request, Insured insured) {
 		final boolean isPrimaryInsuredOwner = request.getPrimaryInsuredId().equals(request.getPolicyOwnerId());
-		final boolean isInsuredDependent = request.getDependentIds() != null &&
-				request.getDependentIds().contains(insured.getCustomerId());
+		final boolean isInsuredDependent = request.getDependentIds().contains(insured.getCustomerId());
 
 		if (isPrimaryInsuredOwner && insured.getCustomerId().equals(request.getPolicyOwnerId())) {
 			return InsuredRole.IO;

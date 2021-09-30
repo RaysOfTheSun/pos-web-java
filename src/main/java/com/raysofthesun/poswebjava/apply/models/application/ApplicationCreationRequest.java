@@ -1,6 +1,7 @@
 package com.raysofthesun.poswebjava.apply.models.application;
 
 import lombok.Data;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;

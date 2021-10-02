@@ -1,10 +1,10 @@
 package com.raysofthesun.poswebjava.apply.models.application;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.raysofthesun.poswebjava.apply.constants.ApplicationStatus;
 import com.raysofthesun.poswebjava.apply.models.insured.Insured;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.ArrayList;
@@ -13,16 +13,18 @@ import java.util.stream.Collectors;
 
 @Getter
 @Document("applications")
+@JsonDeserialize(builder = ApplicationMeta.Builder.class)
+@NoArgsConstructor
 public class ApplicationMeta {
-	private final String id;
-	private final String name;
-	private final String ownerId;
-	private final String insuredId;
-	private final String customerId;
-	private final List<String> dependentIds;
-	private final String creationDate;
-	private final ApplicationStatus status;
-	private final ApplicationPaymentInfo paymentInfo;
+	private String id;
+	private String name;
+	private String ownerId;
+	private String insuredId;
+	private String customerId;
+	private String creationDate;
+	private List<String> dependentIds;
+	private ApplicationStatus status;
+	private ApplicationPaymentInfo paymentInfo;
 
 	private ApplicationMeta(Builder builder) {
 		this.id = builder.getId();
@@ -37,14 +39,15 @@ public class ApplicationMeta {
 	}
 
 	public static Builder create(Application application) {
-		return Builder.fromApplication(application);
+		return Builder.create(application);
 	}
 
 	public static Builder create() {
-		return Builder.createRaw();
+		return Builder.create();
 	}
 
 	@Getter
+	@JsonPOJOBuilder
 	@NoArgsConstructor
 	public static class Builder {
 		private String id;
@@ -83,11 +86,11 @@ public class ApplicationMeta {
 					.collect(Collectors.toList());
 		}
 
-		public static Builder createRaw() {
+		public static Builder create() {
 			return new Builder();
 		}
 
-		public static Builder fromApplication(Application application) {
+		public static Builder create(Application application) {
 			return new Builder(application);
 		}
 

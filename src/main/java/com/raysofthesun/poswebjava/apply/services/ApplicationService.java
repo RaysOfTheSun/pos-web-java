@@ -21,12 +21,14 @@ public class ApplicationService {
 
 	protected final CustomerApi customerApi;
 	protected final RabbitTemplate rabbitTemplate;
+	protected final InsuredService insuredService;
 	protected final ApplicationRepository applicationRepository;
 
 	public ApplicationService(ApplicationRepository applicationRepository, CustomerApi customerApi,
-	                          RabbitTemplate rabbitTemplate) {
+	                          RabbitTemplate rabbitTemplate, InsuredService insuredService) {
 		this.customerApi = customerApi;
 		this.rabbitTemplate = rabbitTemplate;
+		this.insuredService = insuredService;
 		this.applicationRepository = applicationRepository;
 	}
 
@@ -34,6 +36,48 @@ public class ApplicationService {
 			ApplicationCreationRequest request, String agentId) {
 		return createApplicationWithRequest(request, agentId)
 				.flatMap(this::createApplicationMetaAndSave);
+	}
+
+	public Mono<Application> getApplicationWithId(String applicationId) {
+		return applicationRepository
+				.findById(applicationId)
+				.flatMap(this::createApplicationFromMeta);
+	}
+
+	public Flux<Application> getAllApplicationsWithCustomerId(String customerId) {
+		return applicationRepository
+				.findAllByCustomerId(customerId)
+				.flatMap(this::createApplicationFromMeta);
+	}
+
+	protected Mono<Application> createApplicationFromMeta(ApplicationMeta meta) {
+		return this
+				.getAllInsuredsInApplication(meta)
+				.collectMap(Insured::getId)
+				.map(idToInsuredMap -> {
+					List<Insured> dependents = idToInsuredMap
+							.values()
+							.stream()
+							.filter(insured -> meta.getDependentIds().contains(insured.getId()))
+							.collect(Collectors.toList());
+
+					return Application
+							.create(meta)
+							.withOwner(idToInsuredMap.getOrDefault(meta.getOwnerId(), null))
+							.withInsured(idToInsuredMap.getOrDefault(meta.getInsuredId(), null))
+							.withDependents(dependents)
+							.withPaymentInfo(meta.getPaymentInfo())
+							.build();
+				});
+	}
+
+	protected Flux<Insured> getAllInsuredsInApplication(ApplicationMeta meta) {
+		return Flux
+				.fromIterable(meta.getDependentIds())
+				.mergeWith(Flux.just(meta.getOwnerId(), meta.getInsuredId()))
+				.filterWhen((id) -> Mono.just(id != null))
+				.collectList()
+				.flatMapMany(this.insuredService::getInsuredsById);
 	}
 
 	protected Mono<Application> createApplicationMetaAndSave(Application application) {
@@ -82,7 +126,8 @@ public class ApplicationService {
 				.flatMap((customerIds) -> customerApi.getCustomersByIdAndAgentId(agentId, customerIds).collectList())
 				.flatMapMany(Flux::fromIterable)
 				.map(CustomerMapper.MAPPER::mapCustomerToInsured)
-				.map((insured -> assignRoleToInsuredByCreationRequest(request, insured)));
+				.map((insured -> assignRoleToInsuredByCreationRequest(request, insured)))
+				.flatMap(insuredService::saveInsured);
 	}
 
 	protected Flux<String> getCustomerIdsFromRequest(ApplicationCreationRequest request) {

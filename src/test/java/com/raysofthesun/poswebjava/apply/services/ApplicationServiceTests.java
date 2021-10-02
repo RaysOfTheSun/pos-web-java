@@ -9,11 +9,14 @@ import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationR
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
 import com.raysofthesun.poswebjava.apply.models.insured.Insured;
 import com.raysofthesun.poswebjava.apply.repositories.ApplicationRepository;
+import com.raysofthesun.poswebjava.apply.repositories.InsuredRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.Answer;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
@@ -27,8 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("ApplicationService")
 @ExtendWith({MockitoExtension.class})
 public class ApplicationServiceTests {
-	private String testAgentId = "001";
-
+	private final String testAgentId = "001";
 	private Insured mockOwner;
 
 	private Insured mockInsured;
@@ -43,6 +45,9 @@ public class ApplicationServiceTests {
 
 	@Mock
 	private CustomerApi customerApi;
+
+	@Mock
+	private InsuredService insuredService;
 
 	@Mock
 	private ApplicationRepository applicationRepository;
@@ -69,12 +74,11 @@ public class ApplicationServiceTests {
 		mockApplicationCreationRequest = new ApplicationCreationRequest();
 		mockApplicationCreationRequest.setName("SAMPLE APPLICATION");
 		mockApplicationCreationRequest.setProductType("MOCK_PRODUCT");
-		mockApplicationCreationRequest.setTotalPremium(BigDecimal.TEN.toPlainString());
+		mockApplicationCreationRequest.setTotalPremium(BigDecimal.valueOf(20000).toString());
 		mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
 		mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
 
-		when(applicationRepository.save(any(ApplicationMeta.class)))
-				.thenReturn(Mono.just(ApplicationMeta.create().build()));
+
 	}
 
 	@Test
@@ -87,6 +91,12 @@ public class ApplicationServiceTests {
 		when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
 				.thenReturn(Flux.just(mockOwnerCustomer, mockDependentCustomer, mockInsuredCustomer));
 
+		when(applicationRepository.save(any(ApplicationMeta.class)))
+				.thenReturn(Mono.just(ApplicationMeta.create().build()));
+
+		when(insuredService.saveInsured(any(Insured.class)))
+				.thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
+
 		StepVerifier
 				.create(applicationService
 						.createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
@@ -98,6 +108,36 @@ public class ApplicationServiceTests {
 						() -> assertNotNull(application.getInsured()),
 						() -> assertEquals(ApplicationStatus.IN_PROGRESS, application.getStatus())
 				)))
+				.verifyComplete();
+	}
+
+	@Test
+	@DisplayName("should be able to recreate an application based off its meta information")
+	public void shouldBeAbleToCreateApplicationFromMeta() {
+		final Application mockApplication = Application
+				.create(mockApplicationCreationRequest)
+				.withOwner(mockOwner)
+				.withInsured(mockInsured)
+				.withDependents(List.of(mockDependent))
+				.build();
+
+		final ApplicationMeta meta = ApplicationMeta
+				.create(mockApplication)
+				.build();
+
+		when(insuredService.getInsuredsById(anyList()))
+				.thenReturn(Flux.just(mockOwner, mockInsured, mockDependent));
+		when(applicationRepository.findById(meta.getId())).thenReturn(Mono.just(meta));
+
+		StepVerifier
+				.create(applicationService.getApplicationWithId(meta.getId()))
+				.consumeNextWith(application -> assertAll(
+						() -> assertEquals(meta.getId(), application.getId()),
+						() -> assertNotNull(application.getOwner()),
+						() -> assertNotNull(application.getInsured()),
+						() -> assertNotNull(application.getProgressInfo()),
+						() -> assertEquals(meta.getPaymentInfo(), application.getPaymentInfo())
+				))
 				.verifyComplete();
 	}
 
@@ -117,6 +157,12 @@ public class ApplicationServiceTests {
 			mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
 			mockApplicationCreationRequest.setPrimaryInsuredId(mockOwnerCustomer.getId());
 
+			when(applicationRepository.save(any(ApplicationMeta.class)))
+					.thenReturn(Mono.just(ApplicationMeta.create().build()));
+
+			when(insuredService.saveInsured(any(Insured.class)))
+					.thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
+
 			StepVerifier
 					.create(applicationService
 							.createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
@@ -133,6 +179,12 @@ public class ApplicationServiceTests {
 			mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
 			mockApplicationCreationRequest.setPrimaryInsuredId(mockOwnerCustomer.getId());
 			mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
+
+			when(applicationRepository.save(any(ApplicationMeta.class)))
+					.thenReturn(Mono.just(ApplicationMeta.create().build()));
+
+			when(insuredService.saveInsured(any(Insured.class)))
+					.thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
 
 			StepVerifier
 					.create(applicationService

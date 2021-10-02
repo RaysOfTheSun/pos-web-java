@@ -1,5 +1,7 @@
 package com.raysofthesun.poswebjava.apply.models.application;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonPOJOBuilder;
 import com.raysofthesun.poswebjava.apply.constants.ApplicationStatus;
 import com.raysofthesun.poswebjava.apply.constants.PaymentFrequency;
 import com.raysofthesun.poswebjava.apply.models.insured.Insured;
@@ -11,21 +13,20 @@ import java.util.List;
 import java.util.UUID;
 
 @Getter
+@JsonDeserialize(builder = Application.Builder.class)
 public class Application {
-
-	private final String id = UUID.randomUUID().toString();
-	private final String name;
-	private final String creationDate;
-
-	private final Insured owner;
-	private final Insured insured;
-	private final List<Insured> dependents;
-
-	private final ApplicationStatus status;
-	private final ApplicationPaymentInfo paymentInfo;
+	private final  String id;
+	private final  String name;
+	private final  String creationDate;
+	private final  Insured owner;
+	private final  Insured insured;
+	private final  List<Insured> dependents;
+	private final  ApplicationStatus status;
+	private final  ApplicationPaymentInfo paymentInfo;
 	private final List<ApplicationProgressInfo> progressInfo;
 
 	private Application(Builder builder) {
+		this.id = builder.getId();
 		this.name = builder.getName();
 		this.owner = builder.getOwner();
 		this.status = builder.getStatus();
@@ -40,8 +41,14 @@ public class Application {
 		return Builder.fromRequest(request);
 	}
 
+	public static Builder create(ApplicationMeta applicationMeta) {
+		return Builder.fromMeta(applicationMeta);
+	}
+
 	@Getter
+	@JsonPOJOBuilder
 	public static class Builder {
+		private String id;
 		private String name;
 		private String creationDate;
 
@@ -50,17 +57,32 @@ public class Application {
 		private List<Insured> dependents;
 
 		private ApplicationStatus status;
-		private final ApplicationPaymentInfo paymentInfo;
+		private ApplicationPaymentInfo paymentInfo;
 		private List<ApplicationProgressInfo> progressInfo;
 
 		private Builder() {
+			id = UUID.randomUUID().toString();
 			paymentInfo = new ApplicationPaymentInfo();
 		}
 
 		private Builder(ApplicationCreationRequest request) {
 			this();
 			name = request.getName();
+			paymentInfo.setTotalPremium(request.getTotalPremium());
 			creationDate = Instant.now().toString();
+		}
+
+		private Builder(ApplicationMeta meta) {
+			this();
+			id = meta.getId();
+			name = meta.getName();
+			status = meta.getStatus();
+			paymentInfo = meta.getPaymentInfo();
+			creationDate = meta.getCreationDate();
+		}
+
+		public static Builder fromMeta(ApplicationMeta meta) {
+			return new Builder(meta);
 		}
 
 		public static Builder fromRequest(ApplicationCreationRequest request) {
@@ -69,6 +91,11 @@ public class Application {
 
 		public Builder withOwner(Insured owner) {
 			this.owner = owner;
+			return this;
+		}
+
+		public Builder withPaymentInfo(ApplicationPaymentInfo paymentInfo) {
+			this.paymentInfo = paymentInfo;
 			return this;
 		}
 

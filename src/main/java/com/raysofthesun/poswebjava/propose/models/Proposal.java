@@ -7,6 +7,7 @@ import lombok.Data;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -31,7 +32,7 @@ public class Proposal {
 
 	private String insuredId;
 
-	private List<String> dependentIds;
+	private List<String> dependentIds = new ArrayList<>();
 
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private ProposalStatus status = ProposalStatus.DRAFT;

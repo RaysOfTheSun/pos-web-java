@@ -18,5 +18,5 @@ public class Application {
 
 	private ApplicationStatus status;
 	private ApplicationPaymentInfo paymentInfo;
-	private ApplicationProgressInfo progressInfo;
+	private List<ApplicationProgressInfo> progressInfo;
 }

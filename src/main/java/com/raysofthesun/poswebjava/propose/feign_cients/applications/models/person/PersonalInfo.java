@@ -1,4 +1,4 @@
-package com.raysofthesun.poswebjava.apply.models.person;
+package com.raysofthesun.poswebjava.propose.feign_cients.applications.models.person;
 
 import com.raysofthesun.poswebjava.agent.constants.PersonGender;
 import com.raysofthesun.poswebjava.agent.constants.Salutation;
@@ -11,7 +11,7 @@ public class PersonalInfo {
 	private String firstName;
 	private String middleName = "";
 	private String dateOfBirth;
-	private Measurable weight = new Measurable();
+	private Measurable weight = new  Measurable();
 	private Measurable height = new Measurable();
 	private PersonGender gender;
 	private Salutation salutation;

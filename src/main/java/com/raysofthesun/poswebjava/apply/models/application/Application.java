@@ -3,49 +3,64 @@ package com.raysofthesun.poswebjava.apply.models.application;
 import com.raysofthesun.poswebjava.apply.constants.ApplicationStatus;
 import com.raysofthesun.poswebjava.apply.constants.PaymentFrequency;
 import com.raysofthesun.poswebjava.apply.models.insured.Insured;
-import lombok.Data;
+import lombok.Getter;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-@Data
+@Getter
 public class Application {
 
-	private Application() {}
+	private final String id = UUID.randomUUID().toString();
+	private final String name;
+	private final String creationDate;
+
+	private final Insured owner;
+	private final Insured insured;
+	private final List<Insured> dependents;
+
+	private final ApplicationStatus status;
+	private final ApplicationPaymentInfo paymentInfo;
+	private final List<ApplicationProgressInfo> progressInfo;
+
+	private Application(Builder builder) {
+		this.name = builder.getName();
+		this.owner = builder.getOwner();
+		this.status = builder.getStatus();
+		this.insured = builder.getInsured();
+		this.dependents = builder.getDependents();
+		this.paymentInfo = builder.getPaymentInfo();
+		this.creationDate = builder.getCreationDate();
+		this.progressInfo = builder.getProgressInfo();
+	}
 
 	public static Builder create(ApplicationCreationRequest request) {
 		return Builder.fromRequest(request);
 	}
 
-	private String id = UUID.randomUUID().toString();
-	private String name;
-	private String creationDate;
-
-	private Insured owner;
-	private Insured insured;
-	private List<Insured> dependents;
-
-	private ApplicationStatus status;
-	private ApplicationPaymentInfo paymentInfo;
-	private ApplicationProgressInfo progressInfo;
-
+	@Getter
 	public static class Builder {
-		private final Application application;
+		private String name;
+		private String creationDate;
+
+		private Insured owner;
+		private Insured insured;
+		private List<Insured> dependents;
+
+		private ApplicationStatus status;
 		private final ApplicationPaymentInfo paymentInfo;
+		private List<ApplicationProgressInfo> progressInfo;
 
 		private Builder() {
-			application = new Application();
 			paymentInfo = new ApplicationPaymentInfo();
-			application.setPaymentInfo(paymentInfo);
-			application.setDependents(new ArrayList<>());
 		}
 
 		private Builder(ApplicationCreationRequest request) {
 			this();
-			application.setName(request.getName());
-			application.setCreationDate(Instant.now().toString());
+			name = request.getName();
+			creationDate = Instant.now().toString();
 		}
 
 		public static Builder fromRequest(ApplicationCreationRequest request) {
@@ -53,17 +68,17 @@ public class Application {
 		}
 
 		public Builder withOwner(Insured owner) {
-			application.setOwner(owner);
+			this.owner = owner;
 			return this;
 		}
 
 		public Builder withDependents(List<Insured> insureds) {
-			application.setDependents(insureds);
+			dependents = insureds;
 			return this;
 		}
 
 		public Builder withInsured(Insured insured) {
-			application.setInsured(insured);
+			this.insured = insured;
 			return this;
 		}
 
@@ -76,14 +91,12 @@ public class Application {
 			final PaymentFrequency paymentFrequency = paymentInfo.getPaymentFrequency() == null
 					? PaymentFrequency.ANNUAL
 					: paymentInfo.getPaymentFrequency();
-			final ApplicationStatus applicationStatus = application.getStatus() == null
-					? ApplicationStatus.IN_PROGRESS
-					: application.getStatus();
 
-			application.setStatus(applicationStatus);
 			paymentInfo.setPaymentFrequency(paymentFrequency);
+			progressInfo = new ArrayList<>();
+			status = status == null ? ApplicationStatus.IN_PROGRESS : status;
 
-			return application;
+			return new Application(this);
 		}
 	}
 }

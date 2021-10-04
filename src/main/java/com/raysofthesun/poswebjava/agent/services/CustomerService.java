@@ -1,5 +1,6 @@
 package com.raysofthesun.poswebjava.agent.services;
 
+import com.raysofthesun.poswebjava.agent.exception.CustomerNotFoundException;
 import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.agent.repositories.CustomerRepository;
 import org.springframework.stereotype.Service;
@@ -32,7 +33,7 @@ public class CustomerService {
 	public Flux<Customer> getCustomersByIdWithAgentId(String agentId, Collection<String> customerIds) {
 		return customerRepository
 				.findByAgentIdAndIdIn(agentId, customerIds)
-				.switchIfEmpty(Flux.error(new RuntimeException("CANNOT FIND CUSTOMER")));
+				.switchIfEmpty(Flux.error(new CustomerNotFoundException()));
 	}
 
 	public Flux<Customer> getAllCustomersWithAgentId(String agentId) {
@@ -40,9 +41,10 @@ public class CustomerService {
 	}
 
 	public Mono<Boolean> deleteCustomerByIdAndAgentId(String agentId, String customerId) {
-		return customerRepository.existsCustomersByAgentIdAndId(agentId, customerId)
+		return customerRepository
+				.existsCustomersByAgentIdAndId(agentId, customerId)
 				.flatMap((doesCustomerExist) -> doesCustomerExist ? Mono.just(customerId) : Mono.empty())
-				.switchIfEmpty(Mono.error(new RuntimeException("CUSTOMER NOT FOUND")))
+				.switchIfEmpty(Mono.error(new CustomerNotFoundException()))
 				.flatMap((idOfCustomerToDelete) -> customerRepository.deleteById(customerId))
 				.thenReturn(true);
 	}

@@ -1,3 +1,9 @@
 spring:
   application:
     name: pos
+  profiles:
+    active: local
+pos:
+  feign:
+    applyServiceBaseUrl: "localhost:8080/apply"
+    agentServiceBaseUrl: "localhost:8080/agents"

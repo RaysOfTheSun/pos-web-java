@@ -9,12 +9,10 @@ import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationR
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
 import com.raysofthesun.poswebjava.apply.models.insured.Insured;
 import com.raysofthesun.poswebjava.apply.repositories.ApplicationRepository;
-import com.raysofthesun.poswebjava.apply.repositories.InsuredRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.Answer;
 import reactor.core.publisher.Flux;

@@ -15,14 +15,14 @@ import java.util.UUID;
 @Getter
 @JsonDeserialize(builder = Application.Builder.class)
 public class Application {
-	private final  String id;
-	private final  String name;
-	private final  String creationDate;
-	private final  Insured owner;
-	private final  Insured insured;
-	private final  List<Insured> dependents;
-	private final  ApplicationStatus status;
-	private final  ApplicationPaymentInfo paymentInfo;
+	private final String id;
+	private final String name;
+	private final String creationDate;
+	private final Insured owner;
+	private final Insured insured;
+	private final List<Insured> dependents;
+	private final ApplicationStatus status;
+	private final ApplicationPaymentInfo paymentInfo;
 	private final List<ApplicationProgressInfo> progressInfo;
 
 	private Application(Builder builder) {

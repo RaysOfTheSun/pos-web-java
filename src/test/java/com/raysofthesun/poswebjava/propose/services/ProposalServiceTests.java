@@ -5,6 +5,7 @@ import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.appl
 import com.raysofthesun.poswebjava.propose.constants.CannotFinalizeProposalException;
 import com.raysofthesun.poswebjava.propose.constants.CannotFindProposalException;
 import com.raysofthesun.poswebjava.propose.constants.ProposalStatus;
+import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.propose.models.Proposal;
 import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,6 +20,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ProposalService")
 @ExtendWith({MockitoExtension.class})
@@ -35,8 +37,6 @@ public class ProposalServiceTests {
 
 	private Proposal mockProposal;
 
-	private Application mockApplication;
-
 	private final String testAgentId = "001";
 
 	@BeforeEach
@@ -45,31 +45,30 @@ public class ProposalServiceTests {
 		mockProposal.setId("mockProposal");
 		mockProposal.setName("Mock Proposal");
 		mockProposal.setStatus(ProposalStatus.DRAFT);
-
-		mockApplication = new Application();
 	}
 
-//	@Test
-//	@DisplayName("should be able to finalize a DRAFT proposal")
-//	public void shouldBeAbleToFinalizeProposal() {
-//		when(proposalRepository.findByAgentIdAndId(testAgentId, mockProposal.getId()))
-//				.thenReturn(Mono.just(mockProposal));
-//		when(proposalRepository.save(mockProposal)).thenReturn(Mono.just(mockProposal));
-//
-//		when(applyApplicationApi.createApplication(mockProposal, testAgentId)).thenReturn(Mono.just(mockApplication));
-//
-//		StepVerifier
-//				.create(proposalService.finalizeProposal(testAgentId, mockProposal.getId()))
-//				.expectNext(mockApplication)
-//				.verifyComplete();
-//	}
+	@Test
+	@DisplayName("should be able to finalize a DRAFT proposal")
+	public void shouldBeAbleToFinalizeProposal() {
+		when(proposalRepository.findByAgentIdAndId(anyString(), anyString()))
+				.thenReturn(Mono.just(mockProposal));
+		when(applyApplicationApi.createApplication(any(ApplicationCreationRequest.class), anyString()))
+				.thenReturn(Mono.just(new Application()));
+		when(proposalRepository.save(any(Proposal.class)))
+				.thenAnswer((invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))));
+
+		StepVerifier
+				.create(proposalService.finalizeProposal(testAgentId, mockProposal.getId()))
+				.consumeNextWith(application -> assertEquals(ProposalStatus.CONVERTED, mockProposal.getStatus()))
+				.verifyComplete();
+	}
 
 	@Test
 	@DisplayName("should throw an exception if an EXPIRED proposal is to be finalized")
 	public void shouldThrowWhenFinalizingExpiredProposal() {
 		mockProposal.setStatus(ProposalStatus.EXPIRED);
 
-		when(proposalRepository.findByAgentIdAndId(testAgentId, mockProposal.getId()))
+		when(proposalRepository.findByAgentIdAndId(anyString(), anyString()))
 				.thenReturn(Mono.just(mockProposal));
 
 		StepVerifier
@@ -83,7 +82,7 @@ public class ProposalServiceTests {
 	public void shouldThrowWhenFinalizingFinalizedProposal() {
 		mockProposal.setStatus(ProposalStatus.CONVERTED);
 
-		when(proposalRepository.findByAgentIdAndId(testAgentId, mockProposal.getId()))
+		when(proposalRepository.findByAgentIdAndId(anyString(), anyString()))
 				.thenReturn(Mono.just(mockProposal));
 
 		StepVerifier
@@ -95,7 +94,7 @@ public class ProposalServiceTests {
 	@Test
 	@DisplayName("should throw an exception if the proposal to be finalized does not exist")
 	public void shouldThrowWhenFinalizingNonExistentProposal() {
-		when(proposalRepository.findByAgentIdAndId(testAgentId, mockProposal.getId()))
+		when(proposalRepository.findByAgentIdAndId(anyString(), anyString()))
 				.thenReturn(Mono.empty());
 
 		StepVerifier
@@ -107,8 +106,8 @@ public class ProposalServiceTests {
 	@Test
 	@DisplayName("should be able to save a given proposal")
 	public void shouldBeAbleToSaveProposal() {
-		when(proposalRepository.save(mockProposal))
-				.thenReturn(Mono.just(mockProposal));
+		when(proposalRepository.save(any(Proposal.class)))
+				.thenAnswer((invocationOnMock -> Mono.just(invocationOnMock.<Proposal>getArgument(0))));
 
 		StepVerifier
 				.create(proposalService.createProposalWithAgentId(testAgentId, mockProposal))

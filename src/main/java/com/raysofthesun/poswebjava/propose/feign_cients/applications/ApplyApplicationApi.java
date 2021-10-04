@@ -7,6 +7,6 @@ import feign.RequestLine;
 import reactor.core.publisher.Mono;
 
 public interface ApplyApplicationApi {
-	@RequestLine("POST /apply/agents/{agentId}/applications/create")
+	@RequestLine("POST /agents/{agentId}/applications/create")
 	Mono<Application> createApplication(ApplicationCreationRequest request, @Param("agentId") String agentId);
 }

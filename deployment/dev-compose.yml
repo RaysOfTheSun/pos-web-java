@@ -1,0 +1,18 @@
+version: "3.9"
+services:
+  pos-db:
+    image: mongo
+    container_name: "pos-db"
+    ports:
+      - "27017:27017"
+  pos-java:
+    build:
+      context: ../
+      dockerfile: pos-web-java.dockerfile
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pos-db
+    container_name: pos-web-java
+    environment:
+      SPRING_PROFILES_ACTIVE: dev

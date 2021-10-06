@@ -1,8 +1,9 @@
 spring:
   application:
     name: pos
-  profiles:
-    active: local
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/pos
 pos:
   feign:
     applyServiceBaseUrl: "localhost:8080/apply"

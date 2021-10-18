@@ -36,8 +36,8 @@ public class SupportingDocumentsController {
 		return supportingDocumentService.saveDocumentsFromRequest(uploadRequest, agentId, applicationId);
 	}
 
-	@GetMapping(value = "/{agentId}/events", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-	public Flux<String> listenToEventsForAgent(@PathVariable String agentId) {
+	@GetMapping(value = "/{agentId}/events")
+	public Flux<ServerSentEvent<String>> listenToEventsForAgent(@PathVariable String agentId) {
 		return supportingDocumentService.listenToEventsForAgent(agentId);
 	}
 }

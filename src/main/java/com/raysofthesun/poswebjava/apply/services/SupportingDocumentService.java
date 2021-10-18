@@ -78,10 +78,15 @@ public class SupportingDocumentService {
 				});
 	}
 
-	public Flux<String> listenToEventsForAgent(String agentId) {
+	public Flux<ServerSentEvent<String>> listenToEventsForAgent(String agentId) {
 		return documentEventsSink
 				.asFlux()
-				.filterWhen((message) -> Mono.just(message.startsWith(agentId)));
+				.filterWhen((message) -> Mono.just(message.startsWith(agentId)))
+				.map((message) -> ServerSentEvent
+						.<String>builder()
+						.data(message)
+						.build()
+				);
 	}
 
 	private void notifyClientsNeedsRefresh(String agentId, String applicationId, List<String> ownerIds) {

@@ -38,6 +38,10 @@ public class SupportingDocumentService {
 		return documentRepository.findAllByOwnerIdAndApplicationIdOrderByIndex(ownerId, applicationId);
 	}
 
+	public Mono<ApplicationDocumentSource> getDocumentSourceById(String documentId) {
+		return documentSourceRepository.findById(documentId);
+	}
+
 	public Mono<List<String>> saveDocumentsFromRequest(DocumentUploadRequest request, String agentId,
 	                                                   String applicationId) {
 		logger.log(Level.INFO, "=== starting saving of {0} documents",

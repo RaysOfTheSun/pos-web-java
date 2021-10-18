@@ -1,5 +1,6 @@
 package com.raysofthesun.poswebjava.apply.controllers;
 
+import com.raysofthesun.poswebjava.apply.models.document.ApplicationDocumentSource;
 import com.raysofthesun.poswebjava.apply.models.document.DocumentUploadRequest;
 import com.raysofthesun.poswebjava.apply.models.document.SupportingDocument;
 import com.raysofthesun.poswebjava.apply.services.SupportingDocumentService;
@@ -34,6 +35,11 @@ public class SupportingDocumentsController {
 	public Mono<List<String >> saveDocuments(@PathVariable String agentId, @PathVariable String applicationId,
 	                                         @RequestBody DocumentUploadRequest uploadRequest) {
 		return supportingDocumentService.saveDocumentsFromRequest(uploadRequest, agentId, applicationId);
+	}
+
+	@GetMapping("/documents/{documentId}/source")
+	public Mono<ApplicationDocumentSource> getDocumentSourceById(@PathVariable String documentId) {
+		return supportingDocumentService.getDocumentSourceById(documentId);
 	}
 
 	@GetMapping(value = "/{agentId}/events")

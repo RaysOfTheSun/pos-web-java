@@ -1,6 +1,7 @@
 package com.raysofthesun.poswebjava.propose.controllers;
 
 import com.raysofthesun.poswebjava.FeignConfig;
+import com.raysofthesun.poswebjava.SecurityConfig;
 import com.raysofthesun.poswebjava.propose.feign_cients.FeignClients;
 import com.raysofthesun.poswebjava.propose.feign_cients.applications.ApplyApplicationApi;
 import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.Application;
@@ -25,7 +26,7 @@ import static org.mockito.Mockito.*;
 
 @WebFluxTest({ProposalController.class})
 @ExtendWith(MockitoExtension.class)
-@Import({FeignClients.class, ProposalService.class, FeignConfig.class})
+@Import({FeignClients.class, ProposalService.class, FeignConfig.class, SecurityConfig.class})
 @DisplayName("ProposalController")
 public class ProposalControllerTests {
 

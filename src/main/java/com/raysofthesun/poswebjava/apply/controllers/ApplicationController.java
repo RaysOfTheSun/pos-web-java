@@ -6,10 +6,9 @@ import com.raysofthesun.poswebjava.apply.services.ApplicationService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.publisher.Sinks;
 
 @RestController
-@RequestMapping("apply/")
+@RequestMapping("v1/apply/")
 public class ApplicationController {
 	protected ApplicationService applicationService;
 

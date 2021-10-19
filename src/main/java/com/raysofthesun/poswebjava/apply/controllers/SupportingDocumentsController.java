@@ -4,7 +4,6 @@ import com.raysofthesun.poswebjava.apply.models.document.ApplicationDocumentSour
 import com.raysofthesun.poswebjava.apply.models.document.DocumentUploadRequest;
 import com.raysofthesun.poswebjava.apply.models.document.SupportingDocument;
 import com.raysofthesun.poswebjava.apply.services.SupportingDocumentService;
-import org.springframework.http.MediaType;
 import org.springframework.http.codec.ServerSentEvent;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;

@@ -1,6 +1,7 @@
 package com.raysofthesun.poswebjava.apply.controllers;
 
 import com.raysofthesun.poswebjava.FeignConfig;
+import com.raysofthesun.poswebjava.SecurityConfig;
 import com.raysofthesun.poswebjava.apply.feign_clients.FeignClients;
 import com.raysofthesun.poswebjava.apply.models.application.Application;
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationRequest;
@@ -25,7 +26,7 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-@Import({ApplicationService.class, FeignClients.class, FeignConfig.class})
+@Import({ApplicationService.class, FeignClients.class, FeignConfig.class, SecurityConfig.class})
 @ExtendWith(MockitoExtension.class)
 @WebFluxTest(ApplicationController.class)
 @DisplayName("ApplicationController")
@@ -58,7 +59,7 @@ public class ApplicationControllerTests {
 
 		webTestClient
 				.get()
-				.uri("/apply/customers/{customerId}/applications", "random-id")
+				.uri("/v1/apply/customers/{customerId}/applications", "random-id")
 				.exchange()
 				.expectStatus()
 				.is2xxSuccessful()
@@ -72,7 +73,7 @@ public class ApplicationControllerTests {
 
 		webTestClient
 				.get()
-				.uri("/apply/applications/{applicationId}", "random-id")
+				.uri("/v1/apply/applications/{applicationId}", "random-id")
 				.exchange()
 				.expectStatus()
 				.is2xxSuccessful()
@@ -88,7 +89,7 @@ public class ApplicationControllerTests {
 
 		webTestClient
 				.post()
-				.uri("/apply/agents/{agentId}/applications/create", "agentId")
+				.uri("/v1/apply/agents/{agentId}/applications/create", "agentId")
 				.body(Mono.just(new ApplicationCreationRequest()), ApplicationCreationRequest.class)
 				.exchange()
 				.expectStatus()

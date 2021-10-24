@@ -23,12 +23,15 @@ import java.util.logging.Logger;
 public class SupportingDocumentService {
 
 	private final Logger logger = Logger.getLogger(SupportingDocumentService.class.getName());
-	private final Sinks.Many<String> documentEventsSink = Sinks.many().multicast().directAllOrNothing();
+	private final Sinks.Many<String> documentEventsSink;
 	private final SupportingDocumentRepository documentRepository;
 	private final SupportingDocumentSourceRepository documentSourceRepository;
 
-	SupportingDocumentService(SupportingDocumentRepository documentRepository,
-	                          SupportingDocumentSourceRepository documentSourceRepository) {
+	SupportingDocumentService(
+			Sinks.Many<String> documentEventsSink,
+			SupportingDocumentRepository documentRepository,
+			SupportingDocumentSourceRepository documentSourceRepository) {
+		this.documentEventsSink = documentEventsSink;
 		this.documentRepository = documentRepository;
 		this.documentSourceRepository = documentSourceRepository;
 	}

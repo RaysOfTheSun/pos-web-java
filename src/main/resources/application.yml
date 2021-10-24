@@ -8,5 +8,5 @@ spring:
     max-in-memory-size: 200MB
 pos:
   feign:
-    applyServiceBaseUrl: "localhost:8080/apply"
-    agentServiceBaseUrl: "localhost:8080/agents"
+    applyServiceBaseUrl: "localhost:8080/v1/apply"
+    agentServiceBaseUrl: "localhost:8080/v1/agents"

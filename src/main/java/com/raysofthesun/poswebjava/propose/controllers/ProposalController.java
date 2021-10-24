@@ -9,7 +9,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
-@RequestMapping("/propose")
+@RequestMapping("v1/propose")
 public class ProposalController {
 
 	final protected ProposalService proposalService;

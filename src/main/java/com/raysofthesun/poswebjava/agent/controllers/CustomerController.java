@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @RestController
-@RequestMapping("/agents")
+@RequestMapping("v1/agents")
 public class CustomerController {
 
 	final protected CustomerService customerService;
@@ -22,6 +22,12 @@ public class CustomerController {
 	@PutMapping("/{agentId}/customers")
 	public Mono<String> addCustomer(@PathVariable String agentId, @RequestBody Customer customer) {
 		return customerService.addCustomerWithAgentId(customer, agentId);
+	}
+
+	@PatchMapping("/{agentId}/customers/{customerId}")
+	public Mono<String> updateCustomer(@PathVariable String agentId, @PathVariable String customerId,
+	                                   @RequestBody Customer customer) {
+		return customerService.updateCustomer(customerId, agentId, customer);
 	}
 
 	@GetMapping("/{agentId}/customers")

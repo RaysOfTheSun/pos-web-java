@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/agents")
+@RequestMapping("v1/agents")
 public class AgentController {
 
 	final protected AgentService agentService;

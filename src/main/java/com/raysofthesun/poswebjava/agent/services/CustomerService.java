@@ -7,7 +7,10 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.Date;
 
 @Service
 public class CustomerService {
@@ -20,13 +23,28 @@ public class CustomerService {
 
 	public Mono<String> addCustomerWithAgentId(Customer customer, String agentId) {
 
-		Mono<Customer> associateCustomerWithAgent$ = Mono.fromSupplier(() -> {
+		Mono<Customer> updateCustomerProperties = Mono.fromSupplier(() -> {
 			customer.setAgentId(agentId);
+			customer.getPersonalInfo().setAge(getCustomerAge(customer));
 			return customer;
 		});
 
-		return associateCustomerWithAgent$
+		return updateCustomerProperties
 				.flatMap(customerRepository::save)
+				.map(Customer::getId);
+	}
+
+	public Mono<String> updateCustomer(String customerId, String agentId, Customer customer) {
+		return customerRepository
+				.existsCustomersByAgentIdAndId(agentId, customerId)
+				.flatMap((isExistingCustomer) -> isExistingCustomer ? Mono.just(customer)
+						: Mono.error(new CustomerNotFoundException()))
+				.flatMap(updatedCustomer -> {
+					updatedCustomer.setId(customerId);
+					updatedCustomer.setAgentId(agentId);
+					updatedCustomer.getPersonalInfo().setAge(getCustomerAge(customer));
+					return customerRepository.save(updatedCustomer);
+				})
 				.map(Customer::getId);
 	}
 
@@ -47,5 +65,13 @@ public class CustomerService {
 				.switchIfEmpty(Mono.error(new CustomerNotFoundException()))
 				.flatMap((idOfCustomerToDelete) -> customerRepository.deleteById(customerId))
 				.thenReturn(true);
+	}
+
+	private int getCustomerAge(Customer customer) {
+		Instant currDate = Instant.now();
+		Instant customerDob = Instant.parse(customer.getPersonalInfo().getDateOfBirth());
+		long dobAndCurrDateDiffInDays = customerDob.until(currDate, ChronoUnit.DAYS);
+
+		return (int) (dobAndCurrDateDiffInDays / 365);
 	}
 }

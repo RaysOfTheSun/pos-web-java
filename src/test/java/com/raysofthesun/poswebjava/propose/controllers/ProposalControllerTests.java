@@ -49,7 +49,7 @@ public class ProposalControllerTests {
 
 		webTestClient
 				.put()
-				.uri("/propose/agents/{agentId}/proposals", testAgentId)
+				.uri("/v1/propose/agents/{agentId}/proposals", testAgentId)
 				.body(Mono.just(new Proposal()), Proposal.class)
 				.exchange()
 				.expectStatus()
@@ -65,7 +65,7 @@ public class ProposalControllerTests {
 
 		webTestClient
 				.get()
-				.uri("/propose/agents/{agentId}/proposals", testAgentId)
+				.uri("/v1/propose/agents/{agentId}/proposals", testAgentId)
 				.exchange()
 				.expectStatus()
 				.is2xxSuccessful()
@@ -81,7 +81,7 @@ public class ProposalControllerTests {
 
 		webTestClient
 				.post()
-				.uri("/propose/agents/{agentId}/proposals/{proposalId}/finalize", testAgentId, mockProposal.getId())
+				.uri("/v1/propose/agents/{agentId}/proposals/{proposalId}/finalize", testAgentId, mockProposal.getId())
 				.body(Mono.just(mockProposal), Proposal.class)
 				.exchange()
 				.expectStatus()

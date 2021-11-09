@@ -60,16 +60,38 @@ public class CustomerService {
 
 	public Mono<Boolean> deleteCustomerByIdAndAgentId(String agentId, String customerId) {
 		return customerRepository
-				.existsCustomersByAgentIdAndId(agentId, customerId)
-				.flatMap((doesCustomerExist) -> doesCustomerExist ? Mono.just(customerId) : Mono.empty())
+				.findByIdAndAgentId(customerId, agentId)
 				.switchIfEmpty(Mono.error(new CustomerNotFoundException()))
-				.flatMap((idOfCustomerToDelete) -> customerRepository.deleteById(customerId))
+				.map((customer -> {
+					customer.setId(customerId);
+					customer.setDeleted(true);
+					return customer;
+				}))
+				.flatMap(customerRepository::save)
+				.thenReturn(true);
+
+	}
+
+	public Mono<Boolean> restoreCustomerByIdAndAgentId(String agentId, String customerId) {
+		return customerRepository
+				.findByIdAndAgentId(customerId, agentId)
+				.switchIfEmpty(Mono.error(new CustomerNotFoundException()))
+				.map(customer -> {
+					customer.setDeleted(false);
+					return customer;
+				})
+				.flatMap(customerRepository::save)
 				.thenReturn(true);
 	}
 
 	private int getCustomerAge(Customer customer) {
+
+		if (customer.getPersonalInfo().getDateOfBirth() == null) {
+			return -1;
+		}
+
 		Instant currDate = Instant.now();
-		Instant customerDob = Instant.parse(customer.getPersonalInfo().getDateOfBirth());
+		Instant customerDob =  Instant.parse(customer.getPersonalInfo().getDateOfBirth());
 		long dobAndCurrDateDiffInDays = customerDob.until(currDate, ChronoUnit.DAYS);
 
 		return (int) (dobAndCurrDateDiffInDays / 365);

@@ -12,6 +12,7 @@ import java.util.Collection;
 @Repository
 public interface CustomerRepository extends ReactiveMongoRepository<Customer, String> {
 	Flux<Customer> findAllByAgentId(String agentId);
+	Mono<Customer> findByIdAndAgentId(String id, String agentId);
 	Mono<Boolean> existsCustomersByAgentIdAndId(String agentId, String id);
 	Flux<Customer> findByAgentIdAndIdIn(String agentId, Collection<String> ids);
 }

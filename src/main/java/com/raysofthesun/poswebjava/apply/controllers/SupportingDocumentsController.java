@@ -31,8 +31,8 @@ public class SupportingDocumentsController {
 	}
 
 	@PostMapping("/{agentId}/applications/{applicationId}/documents")
-	public Mono<List<String >> saveDocuments(@PathVariable String agentId, @PathVariable String applicationId,
-	                                         @RequestBody DocumentUploadRequest uploadRequest) {
+	public Mono<List<String>> saveDocuments(@PathVariable String agentId, @PathVariable String applicationId,
+	                                        @RequestBody DocumentUploadRequest uploadRequest) {
 		return supportingDocumentService.saveDocumentsFromRequest(uploadRequest, agentId, applicationId);
 	}
 

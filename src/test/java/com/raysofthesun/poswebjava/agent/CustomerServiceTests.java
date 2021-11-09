@@ -83,18 +83,23 @@ public class CustomerServiceTests {
 	}
 
 	@Nested
+	@DisplayName("when deleting customers")
 	public class CustomerDeletionTests {
-
 		@Test
+		@DisplayName("should be able to mark a customer as deleted")
 		public void shouldBeAbleToDeleteCustomer() {
-			when(customerRepository.existsCustomersByAgentIdAndId(anyString(), anyString()))
-					.thenReturn(Mono.just(true));
-			when(customerRepository.deleteById(anyString()))
-					.thenReturn(Mono.empty());
-
+			when(customerRepository.findByIdAndAgentId(anyString(), anyString()))
+					.thenReturn(Mono.just(customer));
+			when(customerRepository.save(any(Customer.class)))
+					.thenAnswer((invocationOnMock -> Mono.just(invocationOnMock.getArgument(0))));
 			StepVerifier
-					.create(customerService.deleteCustomerByIdAndAgentId("agentId", "customerId"))
-					.expectNext(true)
+					.create(customerService.deleteCustomerByIdAndAgentId("001", "customer-id"))
+					.consumeNextWith((isCustomerDeleted) -> {
+						assertAll(
+								() -> assertEquals(true, isCustomerDeleted),
+								() -> assertTrue(customer.isDeleted())
+						);
+					})
 					.verifyComplete();
 		}
 	}

@@ -35,6 +35,11 @@ public class CustomerController {
 		return customerService.getAllCustomersWithAgentId(agentId);
 	}
 
+	@PostMapping("/{agentId}/customers/{customerId}/restore")
+	public Mono<Boolean> restoreCustomerByIdAndAgentId(@PathVariable String agentId, @PathVariable String customerId) {
+		return customerService.restoreCustomerByIdAndAgentId(agentId, customerId);
+	}
+
 	@DeleteMapping("/{agentId}/customers/{customerId}")
 	public Mono<Boolean> deleteCustomerByIdAndAgentId(@PathVariable String agentId, @PathVariable String customerId) {
 		return customerService.deleteCustomerByIdAndAgentId(agentId, customerId);

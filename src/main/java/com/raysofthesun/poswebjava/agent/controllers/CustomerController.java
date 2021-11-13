@@ -31,8 +31,10 @@ public class CustomerController {
 	}
 
 	@GetMapping("/{agentId}/customers")
-	public Flux<Customer> getAllCustomersWithAgentId(@PathVariable String agentId) {
-		return customerService.getAllCustomersWithAgentId(agentId);
+	public Flux<Customer> getAllCustomersWithAgentId(@PathVariable String agentId,
+	                                                 @RequestParam int index,
+	                                                 @RequestParam(defaultValue = "20") int size) {
+		return customerService.getAllCustomersWithAgentId(agentId, index, size);
 	}
 
 	@PostMapping("/{agentId}/customers/{customerId}/restore")
@@ -48,5 +50,11 @@ public class CustomerController {
 	@GetMapping("/{agentId}/customers/customer")
 	public Flux<Customer> getCustomersWithIds(@PathVariable String agentId, @RequestParam List<String> ids) {
 		return customerService.getCustomersByIdWithAgentId(agentId, ids);
+	}
+
+	@GetMapping("/{agentId}/customer-count")
+	public Mono<Integer> getAllCustomerCountByAgentIdAndDeletedStatus(@PathVariable String agentId,
+	                                                                  @RequestParam boolean deleted) {
+		return customerService.getAllCustomerCountByAgentIdAndDeletedStatus(agentId, deleted);
 	}
 }

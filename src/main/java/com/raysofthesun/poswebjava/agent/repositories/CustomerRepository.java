@@ -17,5 +17,6 @@ public interface CustomerRepository extends ReactiveMongoRepository<Customer, St
 	Mono<Customer> findByIdAndAgentId(String id, String agentId);
 	Flux<Customer> findByAgentIdAndIdIn(String agentId, Collection<String> ids);
 	Flux<Customer> findAllByAgentId(String agentId, Pageable pageable);
+	Flux<Customer> findAllByAgentIdAndDeleted(String agentId, boolean deleted, Pageable pageable);
 	Mono<Integer> countCustomerByAgentIdAndDeleted(String agentId, boolean deleted);
 }

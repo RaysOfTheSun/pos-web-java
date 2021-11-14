@@ -33,8 +33,9 @@ public class CustomerController {
 	@GetMapping("/{agentId}/customers")
 	public Flux<Customer> getAllCustomersWithAgentId(@PathVariable String agentId,
 	                                                 @RequestParam int index,
-	                                                 @RequestParam(defaultValue = "20") int size) {
-		return customerService.getAllCustomersWithAgentId(agentId, index, size);
+	                                                 @RequestParam(defaultValue = "20") int size,
+	                                                 @RequestParam(defaultValue = "false") boolean deleted) {
+		return customerService.getAllCustomersWithAgentIdAndDeletedStatus(agentId, index, size, deleted);
 	}
 
 	@PostMapping("/{agentId}/customers/{customerId}/restore")

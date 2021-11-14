@@ -4,7 +4,6 @@ import com.raysofthesun.poswebjava.agent.exception.CustomerNotFoundException;
 import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.agent.repositories.CustomerRepository;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -12,7 +11,6 @@ import reactor.core.publisher.Mono;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class CustomerService {
@@ -60,8 +58,9 @@ public class CustomerService {
 		return customerRepository.findAllByAgentId(agentId);
 	}
 
-	public Flux<Customer> getAllCustomersWithAgentId(String agentId, int pageIndex, int pageSize) {
-		return customerRepository.findAllByAgentId(agentId, PageRequest.of(pageIndex, pageSize));
+	public Flux<Customer> getAllCustomersWithAgentIdAndDeletedStatus(String agentId, int pageIndex,
+	                                                                 int pageSize, boolean deleted) {
+		return customerRepository.findAllByAgentIdAndDeleted(agentId, deleted, PageRequest.of(pageIndex, pageSize));
 	}
 
 	public Mono<Integer> getAllCustomerCountByAgentIdAndDeletedStatus(String agentId, boolean isDeleted) {
@@ -101,7 +100,7 @@ public class CustomerService {
 		}
 
 		Instant currDate = Instant.now();
-		Instant customerDob =  Instant.parse(customer.getPersonalInfo().getDateOfBirth());
+		Instant customerDob = Instant.parse(customer.getPersonalInfo().getDateOfBirth());
 		long dobAndCurrDateDiffInDays = customerDob.until(currDate, ChronoUnit.DAYS);
 
 		return (int) (dobAndCurrDateDiffInDays / 365);

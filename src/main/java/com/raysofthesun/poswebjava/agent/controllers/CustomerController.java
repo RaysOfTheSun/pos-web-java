@@ -2,6 +2,7 @@ package com.raysofthesun.poswebjava.agent.controllers;
 
 import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.agent.services.CustomerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,6 +21,7 @@ public class CustomerController {
 	}
 
 	@PutMapping("/{agentId}/customers")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<String> addCustomer(@PathVariable String agentId, @RequestBody Customer customer) {
 		return customerService.addCustomerWithAgentId(customer, agentId);
 	}

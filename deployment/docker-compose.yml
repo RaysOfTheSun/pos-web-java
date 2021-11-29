@@ -3,6 +3,7 @@ services:
   pos-db:
     image: mongo
     container_name: "pos-db"
+
     ports:
       - "27017:27017"
   pos-java:

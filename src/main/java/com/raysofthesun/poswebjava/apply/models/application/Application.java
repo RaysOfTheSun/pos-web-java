@@ -14,7 +14,7 @@ import java.util.UUID;
 
 @Getter
 @JsonDeserialize(builder = Application.Builder.class)
-public class Application {
+public class  Application {
 	private final String id;
 	private final String name;
 	private final String creationDate;

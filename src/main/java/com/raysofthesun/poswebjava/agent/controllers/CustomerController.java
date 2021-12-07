@@ -26,6 +26,11 @@ public class CustomerController {
 		return customerService.addCustomerWithAgentId(customer, agentId);
 	}
 
+	@GetMapping("/{agentId}/customers/{customerId}")
+	public Mono<Customer> getCustomerByIdAndAgentId(@PathVariable String customerId, @PathVariable String agentId) {
+		return customerService.getCustomerByIdAndAgentId(customerId, agentId);
+	}
+
 	@PatchMapping("/{agentId}/customers/{customerId}")
 	public Mono<String> updateCustomer(@PathVariable String agentId, @PathVariable String customerId,
 	                                   @RequestBody Customer customer) {

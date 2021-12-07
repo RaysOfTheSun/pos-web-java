@@ -50,6 +50,10 @@ public class ApplicationService {
 				.flatMap(this::createApplicationFromMeta);
 	}
 
+	public Flux<ApplicationMeta> getApplicationMetasWithCustomerId(String customerId) {
+		return applicationRepository.findAllByCustomerId(customerId);
+	}
+
 	protected Mono<Application> createApplicationFromMeta(ApplicationMeta meta) {
 		return this
 				.getAllInsuredsInApplication(meta)

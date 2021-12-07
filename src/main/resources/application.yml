@@ -1,11 +1,11 @@
 spring:
   application:
     name: pos
+  codec:
+    max-in-memory-size: 200MB
   data:
     mongodb:
       uri: mongodb://localhost:27017/pos
-  codec:
-    max-in-memory-size: 200MB
 pos:
   feign:
     applyServiceBaseUrl: "localhost:8080/v1/apply"

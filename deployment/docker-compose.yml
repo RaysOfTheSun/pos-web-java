@@ -16,4 +16,4 @@ services:
       - pos-db
     container_name: pos-web-java
     environment:
-      SPRING_PROFILES_ACTIVE: dev
+      SPRING_PROFILES_ACTIVE: docker-dev

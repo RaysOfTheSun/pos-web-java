@@ -34,6 +34,12 @@ public class CustomerService {
 				.map(Customer::getId);
 	}
 
+	public Mono<Customer> getCustomerByIdAndAgentId(String customerId, String agentId) {
+		return customerRepository
+				.findByIdAndAgentId(customerId, agentId)
+				.switchIfEmpty(Mono.error(new CustomerNotFoundException()));
+	}
+
 	public Mono<String> updateCustomer(String customerId, String agentId, Customer customer) {
 		return customerRepository
 				.existsCustomersByAgentIdAndId(agentId, customerId)

@@ -7,7 +7,7 @@ import lombok.Data;
 public class Customer {
 	private String id;
 
-	private PersonalInfo personalInfo;
+	private PersonalInfo personalInfo = new PersonalInfo();
 
 	private String agentId;
 

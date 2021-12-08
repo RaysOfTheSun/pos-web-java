@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raysofthesun.poswebjava.propose.constants.ProposalStatus;
 import lombok.Data;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.math.BigDecimal;
 import java.time.Instant;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Data
+@Document("proposals")
 public class Proposal {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String id = UUID.randomUUID().toString();

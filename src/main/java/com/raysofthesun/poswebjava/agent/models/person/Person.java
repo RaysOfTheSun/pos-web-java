@@ -16,7 +16,7 @@ public class Person {
 	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private String id = UUID.randomUUID().toString();
 
-	private PersonalInfo personalInfo;
+	private PersonalInfo personalInfo = new PersonalInfo();
 
 	private ContactInfo contactInfo;
 }

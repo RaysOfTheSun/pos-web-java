@@ -2,6 +2,7 @@ package com.raysofthesun.poswebjava.agent.controllers;
 
 import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.agent.services.CustomerService;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -20,8 +21,14 @@ public class CustomerController {
 	}
 
 	@PutMapping("/{agentId}/customers")
+	@ResponseStatus(HttpStatus.CREATED)
 	public Mono<String> addCustomer(@PathVariable String agentId, @RequestBody Customer customer) {
 		return customerService.addCustomerWithAgentId(customer, agentId);
+	}
+
+	@GetMapping("/{agentId}/customers/{customerId}")
+	public Mono<Customer> getCustomerByIdAndAgentId(@PathVariable String customerId, @PathVariable String agentId) {
+		return customerService.getCustomerByIdAndAgentId(customerId, agentId);
 	}
 
 	@PatchMapping("/{agentId}/customers/{customerId}")
@@ -31,8 +38,16 @@ public class CustomerController {
 	}
 
 	@GetMapping("/{agentId}/customers")
-	public Flux<Customer> getAllCustomersWithAgentId(@PathVariable String agentId) {
-		return customerService.getAllCustomersWithAgentId(agentId);
+	public Flux<Customer> getAllCustomersWithAgentId(@PathVariable String agentId,
+	                                                 @RequestParam int index,
+	                                                 @RequestParam(defaultValue = "20") int size,
+	                                                 @RequestParam(defaultValue = "false") boolean deleted) {
+		return customerService.getAllCustomersWithAgentIdAndDeletedStatus(agentId, index, size, deleted);
+	}
+
+	@PostMapping("/{agentId}/customers/{customerId}/restore")
+	public Mono<Boolean> restoreCustomerByIdAndAgentId(@PathVariable String agentId, @PathVariable String customerId) {
+		return customerService.restoreCustomerByIdAndAgentId(agentId, customerId);
 	}
 
 	@DeleteMapping("/{agentId}/customers/{customerId}")
@@ -43,5 +58,11 @@ public class CustomerController {
 	@GetMapping("/{agentId}/customers/customer")
 	public Flux<Customer> getCustomersWithIds(@PathVariable String agentId, @RequestParam List<String> ids) {
 		return customerService.getCustomersByIdWithAgentId(agentId, ids);
+	}
+
+	@GetMapping("/{agentId}/customer-count")
+	public Mono<Integer> getAllCustomerCountByAgentIdAndDeletedStatus(@PathVariable String agentId,
+	                                                                  @RequestParam boolean deleted) {
+		return customerService.getAllCustomerCountByAgentIdAndDeletedStatus(agentId, deleted);
 	}
 }

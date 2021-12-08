@@ -19,5 +19,8 @@ public class Customer extends Person {
 
 	private IncomeSource incomeSource;
 
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
+	private boolean deleted;
+
 	private CustomerRelationship relationshipWithCustomer = CustomerRelationship.SELF;
 }

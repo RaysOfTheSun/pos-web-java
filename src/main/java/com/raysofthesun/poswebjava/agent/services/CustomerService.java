@@ -3,6 +3,7 @@ package com.raysofthesun.poswebjava.agent.services;
 import com.raysofthesun.poswebjava.agent.exception.CustomerNotFoundException;
 import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.agent.repositories.CustomerRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -10,7 +11,6 @@ import reactor.core.publisher.Mono;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
-import java.util.Date;
 
 @Service
 public class CustomerService {
@@ -32,6 +32,12 @@ public class CustomerService {
 		return updateCustomerProperties
 				.flatMap(customerRepository::save)
 				.map(Customer::getId);
+	}
+
+	public Mono<Customer> getCustomerByIdAndAgentId(String customerId, String agentId) {
+		return customerRepository
+				.findByIdAndAgentId(customerId, agentId)
+				.switchIfEmpty(Mono.error(new CustomerNotFoundException()));
 	}
 
 	public Mono<String> updateCustomer(String customerId, String agentId, Customer customer) {
@@ -58,16 +64,47 @@ public class CustomerService {
 		return customerRepository.findAllByAgentId(agentId);
 	}
 
+	public Flux<Customer> getAllCustomersWithAgentIdAndDeletedStatus(String agentId, int pageIndex,
+	                                                                 int pageSize, boolean deleted) {
+		return customerRepository.findAllByAgentIdAndDeleted(agentId, deleted, PageRequest.of(pageIndex, pageSize));
+	}
+
+	public Mono<Integer> getAllCustomerCountByAgentIdAndDeletedStatus(String agentId, boolean isDeleted) {
+		return customerRepository.countCustomerByAgentIdAndDeleted(agentId, isDeleted);
+	}
+
 	public Mono<Boolean> deleteCustomerByIdAndAgentId(String agentId, String customerId) {
 		return customerRepository
-				.existsCustomersByAgentIdAndId(agentId, customerId)
-				.flatMap((doesCustomerExist) -> doesCustomerExist ? Mono.just(customerId) : Mono.empty())
+				.findByIdAndAgentId(customerId, agentId)
 				.switchIfEmpty(Mono.error(new CustomerNotFoundException()))
-				.flatMap((idOfCustomerToDelete) -> customerRepository.deleteById(customerId))
+				.map((customer -> {
+					customer.setId(customerId);
+					customer.setDeleted(true);
+					return customer;
+				}))
+				.flatMap(customerRepository::save)
+				.thenReturn(true);
+
+	}
+
+	public Mono<Boolean> restoreCustomerByIdAndAgentId(String agentId, String customerId) {
+		return customerRepository
+				.findByIdAndAgentId(customerId, agentId)
+				.switchIfEmpty(Mono.error(new CustomerNotFoundException()))
+				.map(customer -> {
+					customer.setDeleted(false);
+					return customer;
+				})
+				.flatMap(customerRepository::save)
 				.thenReturn(true);
 	}
 
 	private int getCustomerAge(Customer customer) {
+
+		if (customer.getPersonalInfo().getDateOfBirth() == null) {
+			return -1;
+		}
+
 		Instant currDate = Instant.now();
 		Instant customerDob = Instant.parse(customer.getPersonalInfo().getDateOfBirth());
 		long dobAndCurrDateDiffInDays = customerDob.until(currDate, ChronoUnit.DAYS);

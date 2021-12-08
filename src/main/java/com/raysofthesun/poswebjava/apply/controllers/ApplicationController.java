@@ -2,6 +2,7 @@ package com.raysofthesun.poswebjava.apply.controllers;
 
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.apply.models.application.Application;
+import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
 import com.raysofthesun.poswebjava.apply.services.ApplicationService;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -30,5 +31,10 @@ public class ApplicationController {
 	@GetMapping("/customers/{customerId}/applications")
 	public Flux<Application> getAllApplicationsWithCustomerId(@PathVariable String customerId) {
 		return applicationService.getAllApplicationsWithCustomerId(customerId);
+	}
+
+	@GetMapping("/customers/{customerId}/application-metas")
+	public Flux<ApplicationMeta> getApplicationMetasWithCustomerId(@PathVariable String customerId) {
+		return applicationService.getApplicationMetasWithCustomerId(customerId);
 	}
 }

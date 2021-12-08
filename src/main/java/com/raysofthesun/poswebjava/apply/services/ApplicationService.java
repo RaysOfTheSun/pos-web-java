@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -150,6 +151,7 @@ public class ApplicationService {
 
 	protected InsuredRole getInsuredRoleByCreationRequest(ApplicationCreationRequest request, Insured insured) {
 		final boolean isPrimaryInsuredOwner = request.getPrimaryInsuredId().equals(request.getPolicyOwnerId());
+		Logger.getAnonymousLogger().info(String.format("%s", insured.getCustomerId()));
 		final boolean isInsuredDependent = request.getDependentIds().contains(insured.getCustomerId());
 
 		if (isPrimaryInsuredOwner && insured.getCustomerId().equals(request.getPolicyOwnerId())) {

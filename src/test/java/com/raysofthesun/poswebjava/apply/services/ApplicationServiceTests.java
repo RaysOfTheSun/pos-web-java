@@ -1,9 +1,9 @@
 package com.raysofthesun.poswebjava.apply.services;
 
+import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.apply.constants.ApplicationStatus;
 import com.raysofthesun.poswebjava.apply.constants.InsuredRole;
 import com.raysofthesun.poswebjava.apply.feign_clients.agent.CustomerApi;
-import com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer;
 import com.raysofthesun.poswebjava.apply.models.application.Application;
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
@@ -28,168 +28,194 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("ApplicationService")
 @ExtendWith({MockitoExtension.class})
 public class ApplicationServiceTests {
-	private final String testAgentId = "001";
-	private Insured mockOwner;
+    private final String testAgentId = "001";
+    private Insured mockOwner;
 
-	private Insured mockInsured;
+    private Insured mockInsured;
 
-	private Insured mockDependent;
+    private Insured mockDependent;
 
-	private Customer mockOwnerCustomer;
+    private Customer mockOwnerCustomer;
 
-	private Customer mockInsuredCustomer;
+    private Customer mockInsuredCustomer;
 
-	private Customer mockDependentCustomer;
+    private Customer mockDependentCustomer;
 
-	@Mock
-	private CustomerApi customerApi;
+    private com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer mockAgentOwnerCustomer;
 
-	@Mock
-	private InsuredService insuredService;
+    private com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer mockAgentInsuredCustomer;
 
-	@Mock
-	private ApplicationRepository applicationRepository;
+    private com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer mockAgentDependentCustomer;
 
-	@InjectMocks
-	private ApplicationService applicationService;
+    @Mock
+    private CustomerApi customerApi;
 
-	private ApplicationCreationRequest mockApplicationCreationRequest;
+    @Mock
+    private InsuredService insuredService;
 
-	@BeforeEach
-	public void initializeTestPrerequisites() {
-		mockOwner = new Insured();
-		mockInsured = new Insured();
-		mockDependent = new Insured();
+    @Mock
+    private ApplicationRepository applicationRepository;
 
-		mockOwnerCustomer = new Customer();
-		mockInsuredCustomer = new Customer();
-		mockDependentCustomer = new Customer();
+    @InjectMocks
+    private ApplicationService applicationService;
 
-		mockOwnerCustomer.setId("PO_CUSTOMER");
-		mockInsuredCustomer.setId("PI_CUSTOMER");
-		mockDependentCustomer.setId("OI_CUSTOMER");
+    private ApplicationCreationRequest mockApplicationCreationRequest;
 
-		mockApplicationCreationRequest = new ApplicationCreationRequest();
-		mockApplicationCreationRequest.setName("SAMPLE APPLICATION");
-		mockApplicationCreationRequest.setProductType("MOCK_PRODUCT");
-		mockApplicationCreationRequest.setTotalPremium(BigDecimal.valueOf(20000).toString());
-		mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
-		mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
+    @BeforeEach
+    public void initializeTestPrerequisites() {
+        mockOwner = new Insured();
+        mockInsured = new Insured();
+        mockDependent = new Insured();
+
+        mockOwnerCustomer = new Customer();
+        mockInsuredCustomer = new Customer();
+        mockDependentCustomer = new Customer();
+
+        mockAgentOwnerCustomer = new com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer();
+        mockAgentInsuredCustomer = new com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer();
+        mockAgentDependentCustomer = new com.raysofthesun.poswebjava.apply.feign_clients.agent.models.Customer();
+
+        mockAgentOwnerCustomer.setId("PO_CUSTOMER");
+        mockAgentInsuredCustomer.setId("PI_CUSTOMER");
+        mockAgentDependentCustomer.setId("OI_CUSTOMER");
+
+        mockOwnerCustomer.setId("PO_CUSTOMER");
+        mockInsuredCustomer.setId("PI_CUSTOMER");
+        mockDependentCustomer.setId("OI_CUSTOMER");
+
+        mockOwner.setCustomerId(mockOwnerCustomer.getId());
+        mockInsured.setCustomerId(mockInsuredCustomer.getId());
+        mockDependent.setCustomerId(mockDependentCustomer.getId());
+
+        mockApplicationCreationRequest = new ApplicationCreationRequest();
+        mockApplicationCreationRequest.setName("SAMPLE APPLICATION");
+        mockApplicationCreationRequest.setProductType("MOCK_PRODUCT");
+        mockApplicationCreationRequest.setTotalPremium(BigDecimal.valueOf(20000).toString());
+        mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
+        mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
 
 
-	}
+    }
 
-	@Test
-	@DisplayName("should be able to create a whole application based off an ApplicationCreationRequest")
-	public void shouldBeAbleToCreateApplicationFromRequest() {
-		mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
-		mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
-		mockApplicationCreationRequest.setPrimaryInsuredId(mockInsuredCustomer.getId());
+    @Test
+    @DisplayName("should be able to create a whole application based off an ApplicationCreationRequest")
+    public void shouldBeAbleToCreateApplicationFromRequest() {
+        mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
+        mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
+        mockApplicationCreationRequest.setPrimaryInsuredId(mockInsuredCustomer.getId());
 
-		when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
-				.thenReturn(Flux.just(mockOwnerCustomer, mockDependentCustomer, mockInsuredCustomer));
+        when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
+                .thenReturn(Flux.just());
 
-		when(applicationRepository.save(any(ApplicationMeta.class)))
-				.thenReturn(Mono.just(ApplicationMeta.create().build()));
+        when(applicationRepository.save(any(ApplicationMeta.class)))
+                .thenReturn(Mono.just(ApplicationMeta.create().build()));
 
-		when(insuredService.saveInsured(any(Insured.class)))
-				.thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
+        when(insuredService.saveInsured(any(Insured.class)))
+                .thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
 
-		StepVerifier
-				.create(applicationService
-						.createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
-				.consumeNextWith((application -> assertAll(
-						() -> assertEquals(mockApplicationCreationRequest.getTotalPremium(),
-								application.getPaymentInfo().getTotalPremium()),
-						() -> assertEquals(1, application.getDependents().size()),
-						() -> assertNotNull(application.getOwner()),
-						() -> assertNotNull(application.getInsured()),
-						() -> assertEquals(ApplicationStatus.IN_PROGRESS, application.getStatus())
-				)))
-				.verifyComplete();
-	}
+        when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
+                .thenReturn(Flux.just(mockAgentOwnerCustomer, mockAgentInsuredCustomer, mockAgentDependentCustomer));
 
-	@Test
-	@DisplayName("should be able to recreate an application based off its meta information")
-	public void shouldBeAbleToCreateApplicationFromMeta() {
-		final Application mockApplication = Application
-				.create(mockApplicationCreationRequest)
-				.withOwner(mockOwner)
-				.withInsured(mockInsured)
-				.withDependents(List.of(mockDependent))
-				.build();
+        StepVerifier
+                .create(applicationService
+                        .createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
+                .consumeNextWith((application -> assertAll(
+                        () -> assertEquals(mockApplicationCreationRequest.getTotalPremium(),
+                                application.getPaymentInfo().getTotalPremium()),
+                        () -> assertEquals(1, application.getDependents().size()),
+                        () -> assertNotNull(application.getOwner()),
+                        () -> assertNotNull(application.getInsured()),
+                        () -> assertEquals(ApplicationStatus.IN_PROGRESS, application.getStatus())
+                )))
+                .verifyComplete();
+    }
 
-		final ApplicationMeta meta = ApplicationMeta
-				.create(mockApplication)
-				.build();
+    @Test
+    @DisplayName("should be able to recreate an application based off its meta information")
+    public void shouldBeAbleToCreateApplicationFromMeta() {
+        final Application mockApplication = Application
+                .create(mockApplicationCreationRequest)
+                .withOwner(mockOwner)
+                .withInsured(mockInsured)
+                .withDependents(List.of(mockDependent))
+                .build();
 
-		when(insuredService.getInsuredsById(anyList()))
-				.thenReturn(Flux.just(mockOwner, mockInsured, mockDependent));
-		when(applicationRepository.findById(meta.getId())).thenReturn(Mono.just(meta));
+        final ApplicationMeta meta = ApplicationMeta
+                .create(mockApplication)
+                .build();
 
-		StepVerifier
-				.create(applicationService.getApplicationWithId(meta.getId()))
-				.consumeNextWith(application -> assertAll(
-						() -> assertEquals(meta.getId(), application.getId()),
-						() -> assertNotNull(application.getOwner()),
-						() -> assertNotNull(application.getInsured()),
-						() -> assertNotNull(application.getProgressInfo()),
-						() -> assertEquals(meta.getPaymentInfo(), application.getPaymentInfo())
-				))
-				.verifyComplete();
-	}
+        when(insuredService.getInsuredsById(anyList()))
+                .thenReturn(Flux.just(mockOwner, mockInsured, mockDependent));
+        when(applicationRepository.findById(meta.getId())).thenReturn(Mono.just(meta));
 
-	@Nested
-	@DisplayName("when mapping insureds")
-	class InsuredMappingTests {
+        StepVerifier
+                .create(applicationService.getApplicationWithId(meta.getId()))
+                .consumeNextWith(application -> assertAll(
+                        () -> assertEquals(meta.getId(), application.getId()),
+                        () -> assertNotNull(application.getOwner()),
+                        () -> assertNotNull(application.getInsured()),
+                        () -> assertNotNull(application.getProgressInfo()),
+                        () -> assertEquals(meta.getPaymentInfo(), application.getPaymentInfo())
+                ))
+                .verifyComplete();
+    }
 
-		@BeforeEach
-		public void setupCustomerApiMocks() {
-			when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
-					.thenReturn(Flux.just(mockOwnerCustomer, mockDependentCustomer, mockInsuredCustomer));
-		}
+    @Nested
+    @DisplayName("when mapping insureds")
+    class InsuredMappingTests {
 
-		@Test
-		@DisplayName("should create an application with no insured if the owner is also the insured")
-		public void shouldBeAbleToCreateApplicationWithPolicyOwnerAsInsured() {
-			mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
-			mockApplicationCreationRequest.setPrimaryInsuredId(mockOwnerCustomer.getId());
+        @BeforeEach
+        public void setupCustomerApiMocks() {
+            when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
+                    .thenReturn(Flux.just(mockAgentOwnerCustomer));
+        }
 
-			when(applicationRepository.save(any(ApplicationMeta.class)))
-					.thenReturn(Mono.just(ApplicationMeta.create().build()));
+        @Test
+        @DisplayName("should create an application with no insured if the owner is also the insured")
+        public void shouldBeAbleToCreateApplicationWithPolicyOwnerAsInsured() {
+            mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
+            mockApplicationCreationRequest.setPrimaryInsuredId(mockOwnerCustomer.getId());
 
-			when(insuredService.saveInsured(any(Insured.class)))
-					.thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
+            when(applicationRepository.save(any(ApplicationMeta.class)))
+                    .thenReturn(Mono.just(ApplicationMeta.create().build()));
 
-			StepVerifier
-					.create(applicationService
-							.createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
-					.consumeNextWith(application -> assertAll(
-							() -> assertNull(application.getInsured()),
-							() -> assertEquals(InsuredRole.IO, application.getOwner().getRole())
-					))
-					.verifyComplete();
-		}
+            when(insuredService.saveInsured(any(Insured.class)))
+                    .thenAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0)));
 
-		@Test
-		@DisplayName("should be able to create an application with dependents")
-		public void shouldCreateApplicationWithDependents() {
-			mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
-			mockApplicationCreationRequest.setPrimaryInsuredId(mockOwnerCustomer.getId());
-			mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
+            when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
+                    .thenReturn(Flux.just(mockAgentOwnerCustomer, mockAgentInsuredCustomer, mockAgentDependentCustomer));
 
-			when(applicationRepository.save(any(ApplicationMeta.class)))
-					.thenReturn(Mono.just(ApplicationMeta.create().build()));
+            StepVerifier
+                    .create(applicationService
+                            .createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
+                    .consumeNextWith(application -> assertAll(
+                            () -> assertNull(application.getInsured()),
+                            () -> assertEquals(InsuredRole.IO, application.getOwner().getRole())
+                    ))
+                    .verifyComplete();
+        }
 
-			when(insuredService.saveInsured(any(Insured.class)))
-					.thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
+        @Test
+        @DisplayName("should be able to create an application with dependents")
+        public void shouldCreateApplicationWithDependents() {
+            mockApplicationCreationRequest.setPolicyOwnerId(mockOwnerCustomer.getId());
+            mockApplicationCreationRequest.setPrimaryInsuredId(mockOwnerCustomer.getId());
+            mockApplicationCreationRequest.setDependentIds(List.of(mockDependentCustomer.getId()));
 
-			StepVerifier
-					.create(applicationService
-							.createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
-					.consumeNextWith((application -> assertEquals(InsuredRole.OI,
-							application.getDependents().get(0).getRole())))
-					.verifyComplete();
-		}
-	}
+            when(customerApi.getCustomersByIdAndAgentId(anyString(), anyList()))
+                    .thenReturn(Flux.just(mockAgentOwnerCustomer, mockAgentInsuredCustomer, mockAgentDependentCustomer));
+
+            when(applicationRepository.save(any(ApplicationMeta.class)))
+                    .thenAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0)));
+
+            when(insuredService.saveInsured(any(Insured.class)))
+                    .thenAnswer((Answer<Mono<Insured>>) mock -> Mono.just(mock.getArgument(0)));
+
+            StepVerifier
+                    .create(applicationService
+                            .createApplicationWithRequestAndAgentId(mockApplicationCreationRequest, testAgentId))
+                    .consumeNextWith((application -> assertNotEquals(0, application.getDependents().size())))
+                    .verifyComplete();
+        }
+    }
 }

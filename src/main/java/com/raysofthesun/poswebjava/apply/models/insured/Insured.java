@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("insureds")
 @EqualsAndHashCode(callSuper = true)
 public class Insured extends Person {
-	String customerId;
+	String customerId = "";
 
 	InsuredRole role;
 

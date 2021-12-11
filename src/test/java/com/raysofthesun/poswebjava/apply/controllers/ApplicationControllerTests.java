@@ -2,6 +2,7 @@ package com.raysofthesun.poswebjava.apply.controllers;
 
 import com.raysofthesun.poswebjava.FeignConfig;
 import com.raysofthesun.poswebjava.SecurityConfig;
+import com.raysofthesun.poswebjava.TestSecurityConfig;
 import com.raysofthesun.poswebjava.apply.feign_clients.FeignClients;
 import com.raysofthesun.poswebjava.apply.models.application.Application;
 import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationRequest;
@@ -18,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -26,7 +28,8 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-@Import({ApplicationService.class, FeignClients.class, FeignConfig.class, SecurityConfig.class})
+@ActiveProfiles("test")
+@Import({ApplicationService.class, FeignClients.class, FeignConfig.class, TestSecurityConfig.class})
 @ExtendWith(MockitoExtension.class)
 @WebFluxTest(ApplicationController.class)
 @DisplayName("ApplicationController")

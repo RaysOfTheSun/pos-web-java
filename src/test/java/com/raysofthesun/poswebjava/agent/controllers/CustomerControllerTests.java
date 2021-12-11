@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.agent.controllers;
 
-import com.raysofthesun.poswebjava.SecurityConfig;
+import com.raysofthesun.poswebjava.TestSecurityConfig;
 import com.raysofthesun.poswebjava.agent.models.customer.Customer;
 import com.raysofthesun.poswebjava.agent.services.CustomerService;
 import org.junit.jupiter.api.DisplayName;
@@ -11,13 +11,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.web.reactive.function.BodyInserters;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.*;
 
-@Import({SecurityConfig.class, CustomerService.class})
+@ActiveProfiles("test")
+@Import({TestSecurityConfig.class, CustomerService.class})
 @ExtendWith(MockitoExtension.class)
 @WebFluxTest(CustomerController.class)
 @DisplayName("CustomerController")

@@ -1,12 +1,10 @@
 package com.raysofthesun.poswebjava.propose.controllers;
 
 import com.raysofthesun.poswebjava.FeignConfig;
-import com.raysofthesun.poswebjava.SecurityConfig;
+import com.raysofthesun.poswebjava.TestSecurityConfig;
 import com.raysofthesun.poswebjava.propose.feign_cients.FeignClients;
-import com.raysofthesun.poswebjava.propose.feign_cients.applications.ApplyApplicationApi;
 import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.Application;
 import com.raysofthesun.poswebjava.propose.models.Proposal;
-import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
 import com.raysofthesun.poswebjava.propose.services.ProposalService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -24,9 +23,10 @@ import java.util.List;
 
 import static org.mockito.Mockito.*;
 
-@WebFluxTest({ProposalController.class})
+@ActiveProfiles("test")
+@WebFluxTest(value = {ProposalController.class})
 @ExtendWith(MockitoExtension.class)
-@Import({FeignClients.class, ProposalService.class, FeignConfig.class, SecurityConfig.class})
+@Import({FeignClients.class, ProposalService.class, FeignConfig.class, TestSecurityConfig.class})
 @DisplayName("ProposalController")
 public class ProposalControllerTests {
 

@@ -8,6 +8,7 @@ import com.raysofthesun.poswebjava.propose.constants.ProposalStatus;
 import com.raysofthesun.poswebjava.propose.feign_cients.applications.models.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.propose.models.Proposal;
 import com.raysofthesun.poswebjava.propose.repositories.ProposalRepository;
+import com.raysofthesun.poswebjava.propose.services.ProposalService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

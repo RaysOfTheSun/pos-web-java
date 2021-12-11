@@ -1,22 +1,24 @@
 package com.raysofthesun.poswebjava;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
-
+@Profile("test")
 @EnableWebFluxSecurity
-public class SecurityConfig {
+public class TestSecurityConfig {
 
     @Bean
-    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http
+    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
+        return httpSecurity
                 .authorizeExchange()
                 .anyExchange()
-                .authenticated()
+                .permitAll()
                 .and()
-                .oauth2ResourceServer(ServerHttpSecurity.OAuth2ResourceServerSpec::jwt)
+                .csrf()
+                .disable()
                 .build();
     }
 }

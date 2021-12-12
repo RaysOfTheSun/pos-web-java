@@ -6,19 +6,19 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
-
-@Profile("dev")
+@Profile("local")
 @EnableWebFluxSecurity
-public class SecurityConfig {
+public class LocalSecurityConfig {
 
     @Bean
-    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http
+    SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
+        return httpSecurity
+                .csrf()
+                .disable()
                 .authorizeExchange()
                 .anyExchange()
-                .authenticated()
+                .permitAll()
                 .and()
-                .oauth2ResourceServer(ServerHttpSecurity.OAuth2ResourceServerSpec::jwt)
                 .build();
     }
 }

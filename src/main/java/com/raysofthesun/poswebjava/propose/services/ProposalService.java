@@ -12,68 +12,68 @@ import reactor.core.publisher.Mono;
 
 @Service
 public class ProposalService {
-	protected final ProposalRepository proposalRepository;
-	protected final ApplyApplicationApi applyApplicationApi;
+    protected final ProposalRepository proposalRepository;
+    protected final ApplyApplicationApi applyApplicationApi;
 
-	public ProposalService(ProposalRepository proposalRepository, ApplyApplicationApi applyApplicationApi) {
-		this.proposalRepository = proposalRepository;
-		this.applyApplicationApi = applyApplicationApi;
-	}
+    public ProposalService(ProposalRepository proposalRepository, ApplyApplicationApi applyApplicationApi) {
+        this.proposalRepository = proposalRepository;
+        this.applyApplicationApi = applyApplicationApi;
+    }
 
-	public Mono<String> createProposalWithAgentId(String agentId, Proposal proposal) {
-		return Mono
-				.just(proposal)
-				.map((proposal1 -> {
-					proposal.setAgentId(agentId);
-					return proposal;
-				}))
-				.flatMap(proposalRepository::save)
-				.map(Proposal::getId);
+    public Mono<String> createProposalWithAgentId(String agentId, Proposal proposal) {
+        return Mono
+                .just(proposal)
+                .map((proposal1 -> {
+                    proposal.setAgentId(agentId);
+                    return proposal;
+                }))
+                .flatMap(proposalRepository::save)
+                .map(Proposal::getId);
 
-	}
+    }
 
-	public Flux<Proposal> getProposalsByAgentId(String agentId) {
-		return proposalRepository.findAllByAgentId(agentId);
-	}
+    public Flux<Proposal> getProposalsByAgentId(String agentId) {
+        return proposalRepository.findAllByAgentId(agentId);
+    }
 
-	public Mono<Application> finalizeProposal(String agentId, String proposalId) {
-		return proposalRepository
-				.findByAgentIdAndId(agentId, proposalId)
-				.switchIfEmpty(Mono.error(new CannotFindProposalException(proposalId)))
-				.flatMap(this::makeFinalizedProposal)
-				.map(ProposalMapper.PROPOSAL_MAPPER::proposalToApplicationCreationRequest)
-				.flatMap((finalizedProposal) -> applyApplicationApi.createApplication(finalizedProposal, agentId))
-				.onErrorResume((throwable -> throwable instanceof ProposeApiException
-						? Mono.error(throwable)
-						: unFinalizeProposal(agentId, proposalId)
-						.flatMap((proposal -> Mono.error(new FailedToFinalizeProposalException(proposal))))));
-	}
+    public Mono<Application> finalizeProposal(String agentId, String proposalId) {
+        return proposalRepository
+                .findByAgentIdAndId(agentId, proposalId)
+                .switchIfEmpty(Mono.error(new CannotFindProposalException(proposalId)))
+                .flatMap(this::makeFinalizedProposal)
+                .map(ProposalMapper.PROPOSAL_MAPPER::proposalToApplicationCreationRequest)
+                .flatMap((finalizedProposal) -> applyApplicationApi.createApplication(finalizedProposal, agentId))
+                .onErrorResume((throwable -> throwable instanceof ProposeApiException
+                        ? Mono.error(throwable)
+                        : unFinalizeProposal(agentId, proposalId)));
+    }
 
-	protected Mono<Proposal> unFinalizeProposal(String agentId, String proposalId) {
-		return proposalRepository
-				.findByAgentIdAndId(agentId, proposalId)
-				.map(proposal -> {
-					proposal.setStatus(ProposalStatus.DRAFT);
-					return proposal;
-				})
-				.flatMap(proposalRepository::save);
-	}
+    protected Mono<Application> unFinalizeProposal(String agentId, String proposalId) {
+        return proposalRepository
+                .findByAgentIdAndId(agentId, proposalId)
+                .map(proposal -> {
+                    proposal.setStatus(ProposalStatus.DRAFT);
+                    return proposal;
+                })
+                .flatMap(proposalRepository::save)
+                .then(Mono.error(new FailedToFinalizeProposalException(proposalId)));
+    }
 
-	protected Mono<Proposal> canProposalBeFinalized(Proposal proposal) {
-		return Flux
-				.just(ProposalStatus.DRAFT)
-				.filterWhen((invalidProposalStatus) -> Mono.just(proposal.getStatus().equals(invalidProposalStatus)))
-				.mapNotNull((proposalStatus) -> proposal)
-				.next();
-	}
+    protected Mono<Proposal> canProposalBeFinalized(Proposal proposal) {
+        return Flux
+                .just(ProposalStatus.DRAFT)
+                .filterWhen((invalidProposalStatus) -> Mono.just(proposal.getStatus().equals(invalidProposalStatus)))
+                .mapNotNull((proposalStatus) -> proposal)
+                .next();
+    }
 
-	protected Mono<Proposal> makeFinalizedProposal(Proposal proposalToFinalize) {
-		return canProposalBeFinalized(proposalToFinalize)
-				.switchIfEmpty(Mono.error(new CannotFinalizeProposalException(proposalToFinalize)))
-				.map((proposal -> {
-					proposal.setStatus(ProposalStatus.CONVERTED);
-					return proposal;
-				}))
-				.flatMap(proposalRepository::save);
-	}
+    protected Mono<Proposal> makeFinalizedProposal(Proposal proposalToFinalize) {
+        return canProposalBeFinalized(proposalToFinalize)
+                .switchIfEmpty(Mono.error(new CannotFinalizeProposalException(proposalToFinalize)))
+                .map((proposal -> {
+                    proposal.setStatus(ProposalStatus.CONVERTED);
+                    return proposal;
+                }))
+                .flatMap(proposalRepository::save);
+    }
 }

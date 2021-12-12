@@ -7,6 +7,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 @Service
@@ -23,5 +24,12 @@ public class InsuredService {
 
 	public Mono<Insured> saveInsured(Insured insured) {
 		return insuredRepository.save(insured);
+	}
+
+	public Mono<Boolean> saveAllInsureds(Collection<Insured> insureds) {
+		return insuredRepository
+				.saveAll(insureds)
+				.then(Mono.just(true));
+
 	}
 }

@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Getter
+@Setter
 @Document("applications")
 @JsonDeserialize(builder = ApplicationMeta.Builder.class)
 @NoArgsConstructor
@@ -25,6 +26,7 @@ public class ApplicationMeta {
 	private String customerId;
 	private String insuredName;
 	private String creationDate;
+	private String lastModifiedDate;
 	private List<String> dependentIds;
 	private ApplicationStatus status;
 	private ApplicationPaymentInfo paymentInfo;

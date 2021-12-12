@@ -37,4 +37,10 @@ public class ApplicationController {
 	public Flux<ApplicationMeta> getApplicationMetasWithCustomerId(@PathVariable String customerId) {
 		return applicationService.getApplicationMetasWithCustomerId(customerId);
 	}
+
+	@PostMapping("/applications/{applicationId}")
+	public Mono<Boolean> updateApplicationWithId(@PathVariable String applicationId,
+												 @RequestBody Application application) {
+		return applicationService.updateApplication(applicationId, application);
+	}
 }

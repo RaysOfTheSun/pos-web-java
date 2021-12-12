@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.constants;
 
-import com.raysofthesun.poswebjava.propose.models.Proposal;
+import com.raysofthesun.poswebjava.propose.proposals.models.Proposal;
 
 public class CannotFinalizeProposalException extends ProposeApiException {
 	public CannotFinalizeProposalException(Proposal proposal) {

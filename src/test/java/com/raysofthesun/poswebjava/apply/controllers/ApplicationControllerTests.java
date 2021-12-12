@@ -1,15 +1,15 @@
 package com.raysofthesun.poswebjava.apply.controllers;
 
 import com.raysofthesun.poswebjava.FeignConfig;
-import com.raysofthesun.poswebjava.SecurityConfig;
 import com.raysofthesun.poswebjava.TestSecurityConfig;
-import com.raysofthesun.poswebjava.apply.feign_clients.FeignClients;
-import com.raysofthesun.poswebjava.apply.models.application.Application;
-import com.raysofthesun.poswebjava.apply.models.application.ApplicationCreationRequest;
-import com.raysofthesun.poswebjava.apply.models.application.ApplicationMeta;
-import com.raysofthesun.poswebjava.apply.models.application.ApplicationPaymentInfo;
-import com.raysofthesun.poswebjava.apply.models.insured.Insured;
-import com.raysofthesun.poswebjava.apply.services.ApplicationService;
+import com.raysofthesun.poswebjava.apply.application.controllers.ApplicationController;
+import com.raysofthesun.poswebjava.apply.feign.customer.CustomerApiFeignClients;
+import com.raysofthesun.poswebjava.apply.application.models.Application;
+import com.raysofthesun.poswebjava.apply.application.models.ApplicationCreationRequest;
+import com.raysofthesun.poswebjava.apply.application.models.ApplicationMeta;
+import com.raysofthesun.poswebjava.apply.application.models.ApplicationPaymentInfo;
+import com.raysofthesun.poswebjava.apply.insured.models.insured.Insured;
+import com.raysofthesun.poswebjava.apply.application.services.ApplicationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,7 +29,7 @@ import java.util.List;
 import static org.mockito.Mockito.*;
 
 @ActiveProfiles("test")
-@Import({ApplicationService.class, FeignClients.class, FeignConfig.class, TestSecurityConfig.class})
+@Import({ApplicationService.class, CustomerApiFeignClients.class, FeignConfig.class, TestSecurityConfig.class})
 @ExtendWith(MockitoExtension.class)
 @WebFluxTest(ApplicationController.class)
 @DisplayName("ApplicationController")

@@ -25,7 +25,7 @@ spring:
 #            user-name-attribute: preferred_username
 pos:
   feign:
-    applyServiceBaseUrl: "localhost:8080/v1/apply"
-    agentServiceBaseUrl: "localhost:8080/v1/agents"
+    applyServiceBaseUrl: "localhost:8081/v1/apply"
+    agentServiceBaseUrl: "localhost:8081/v1/agents"
 server:
   port: 8081

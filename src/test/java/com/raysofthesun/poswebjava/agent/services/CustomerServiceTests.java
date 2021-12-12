@@ -1,8 +1,8 @@
 package com.raysofthesun.poswebjava.agent.services;
 
-import com.raysofthesun.poswebjava.agent.models.customer.Customer;
-import com.raysofthesun.poswebjava.agent.repositories.CustomerRepository;
-import com.raysofthesun.poswebjava.agent.services.CustomerService;
+import com.raysofthesun.poswebjava.agent.customer.models.Customer;
+import com.raysofthesun.poswebjava.agent.customer.repositories.CustomerRepository;
+import com.raysofthesun.poswebjava.agent.customer.services.CustomerService;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

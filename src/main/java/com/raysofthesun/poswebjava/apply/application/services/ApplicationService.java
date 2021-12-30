@@ -9,7 +9,6 @@ import com.raysofthesun.poswebjava.apply.application.models.Application;
 import com.raysofthesun.poswebjava.apply.application.models.ApplicationMeta;
 import com.raysofthesun.poswebjava.apply.insured.models.insured.Insured;
 import com.raysofthesun.poswebjava.apply.application.repositories.ApplicationRepository;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,7 +16,6 @@ import reactor.core.publisher.Mono;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -89,12 +87,19 @@ public class ApplicationService {
                             .filter(insured -> meta.getDependentIds().contains(insured.getId()))
                             .collect(Collectors.toList());
 
-                    return Application
+                    Application.Builder rawApplication = Application
                             .create(meta)
-                            .withOwner(idToInsuredMap.getOrDefault(meta.getOwnerId(), null))
-                            .withInsured(idToInsuredMap.getOrDefault(meta.getInsuredId(), null))
                             .withDependents(dependents)
-                            .withPaymentInfo(meta.getPaymentInfo())
+                            .withPaymentInfo(meta.getPaymentInfo());
+
+                    if (meta.getInsuredId().equals(meta.getOwnerId())) {
+                        return rawApplication
+                                .withOwner(idToInsuredMap.getOrDefault(meta.getOwnerId(), null))
+                                .build();
+                    }
+
+                    return rawApplication
+                            .withInsured(idToInsuredMap.getOrDefault(meta.getInsuredId(), null))
                             .build();
                 });
     }

@@ -1,4 +1,4 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://host.docker.internal:27017/pos
+      uri: mongodb://pos-db:27017/pos

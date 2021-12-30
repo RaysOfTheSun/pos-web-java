@@ -6,12 +6,15 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+import java.util.logging.Logger;
+
 @Profile("local")
 @EnableWebFluxSecurity
 public class LocalSecurityConfig {
 
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity httpSecurity) {
+        Logger.getAnonymousLogger().warning("security disabled!");
         return httpSecurity
                 .csrf()
                 .disable()

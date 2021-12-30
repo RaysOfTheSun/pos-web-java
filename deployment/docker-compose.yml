@@ -9,11 +9,10 @@ services:
   pos-java:
     build:
       context: ../
-      dockerfile: pos-web-java.dockerfile
     ports:
-      - "8080:8080"
+      - "9000:8081"
     depends_on:
       - pos-db
     container_name: pos-web-java
     environment:
-      SPRING_PROFILES_ACTIVE: docker-dev
+      SPRING_PROFILES_ACTIVE: docker-local, local

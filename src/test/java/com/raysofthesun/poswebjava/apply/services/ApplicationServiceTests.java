@@ -87,6 +87,10 @@ public class ApplicationServiceTests {
         mockInsuredCustomer.setId("PI_CUSTOMER");
         mockDependentCustomer.setId("OI_CUSTOMER");
 
+        mockOwner.setId("owner");
+        mockInsured.setId("insured");
+        mockDependent.setId("dependent");
+
         mockOwner.setCustomerId(mockOwnerCustomer.getId());
         mockInsured.setCustomerId(mockInsuredCustomer.getId());
         mockDependent.setCustomerId(mockDependentCustomer.getId());

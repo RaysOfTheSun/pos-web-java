@@ -90,12 +90,11 @@ public class ApplicationService {
                     Application.Builder rawApplication = Application
                             .create(meta)
                             .withDependents(dependents)
-                            .withPaymentInfo(meta.getPaymentInfo());
+                            .withPaymentInfo(meta.getPaymentInfo())
+                            .withOwner(idToInsuredMap.getOrDefault(meta.getOwnerId(), null));
 
                     if (meta.getInsuredId().equals(meta.getOwnerId())) {
-                        return rawApplication
-                                .withOwner(idToInsuredMap.getOrDefault(meta.getOwnerId(), null))
-                                .build();
+                        return rawApplication.build();
                     }
 
                     return rawApplication

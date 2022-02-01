@@ -1,6 +1,4 @@
 spring:
-  profiles:
-    active: docker-local
   application:
     name: pos
   codec:
@@ -8,6 +6,8 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/pos
+  profiles:
+    active: local
 pos:
   feign:
     applyServiceBaseUrl: "localhost:9000/v1/apply"

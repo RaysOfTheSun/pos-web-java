@@ -124,7 +124,7 @@ public class CustomerServiceTests {
 			when(customerRepository.findAllByAgentIdAndDeleted(anyString(), anyBoolean(), any(PageRequest.class)))
 					.thenReturn(Flux.just(new Customer()));
 			StepVerifier
-					.create(customerService.getAllCustomersWithAgentIdAndDeletedStatus("", 0, 20, false))
+					.create(customerService.getAllCustomerSummariesByAgentIdAndPage("", 0, 20, false))
 					.consumeNextWith(Assertions::assertNotNull)
 					.verifyComplete();
 

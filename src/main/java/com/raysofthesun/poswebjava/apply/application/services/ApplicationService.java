@@ -9,6 +9,7 @@ import com.raysofthesun.poswebjava.apply.application.models.Application;
 import com.raysofthesun.poswebjava.apply.application.models.ApplicationMeta;
 import com.raysofthesun.poswebjava.apply.insured.models.insured.Insured;
 import com.raysofthesun.poswebjava.apply.application.repositories.ApplicationRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -66,14 +67,18 @@ public class ApplicationService {
 
     }
 
-    public Flux<Application> getAllApplicationsWithCustomerId(String customerId) {
-        return applicationRepository
-                .findAllByCustomerId(customerId)
-                .flatMap(this::createApplicationFromMeta);
+    public Mono<Integer> getTotalApplicationCountForCustomerById(String customerId) {
+        return applicationRepository.countApplicationMetasByCustomerId(customerId);
     }
 
-    public Flux<ApplicationMeta> getApplicationMetasWithCustomerId(String customerId) {
-        return applicationRepository.findAllByCustomerId(customerId);
+//    public Flux<Application> getAllApplicationsWithCustomerId(String customerId) {
+//        return applicationRepository
+//                .findAllByCustomerId(customerId)
+//                .flatMap(this::createApplicationFromMeta);
+//    }
+
+    public Flux<ApplicationMeta> getApplicationMetasWithCustomerId(String customerId, int pageIndex, int pageSize) {
+        return applicationRepository.findAllByCustomerId(customerId, PageRequest.of(pageIndex, pageSize));
     }
 
     protected Mono<Application> createApplicationFromMeta(ApplicationMeta meta) {

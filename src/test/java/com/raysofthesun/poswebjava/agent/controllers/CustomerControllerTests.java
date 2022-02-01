@@ -3,6 +3,7 @@ package com.raysofthesun.poswebjava.agent.controllers;
 import com.raysofthesun.poswebjava.TestSecurityConfig;
 import com.raysofthesun.poswebjava.agent.customer.controllers.CustomerController;
 import com.raysofthesun.poswebjava.agent.customer.models.Customer;
+import com.raysofthesun.poswebjava.agent.customer.models.RawCustomer;
 import com.raysofthesun.poswebjava.agent.customer.services.CustomerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -35,7 +36,7 @@ public class CustomerControllerTests {
 	@Test
 	@DisplayName("should respond with HTTP 201 if the customer is successfully added")
 	public void shouldRespondWith201WhenAddingCustomers() {
-		when(customerService.addCustomerWithAgentId(any(Customer.class), anyString()))
+		when(customerService.addCustomerWithAgentId(any(RawCustomer.class), anyString()))
 				.thenReturn(Mono.just(""));
 		webTestClient.put()
 				.uri("/v1/agents/001/customers")

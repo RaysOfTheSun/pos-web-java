@@ -1,9 +1,13 @@
 package com.raysofthesun.poswebjava.agent.customer.services;
 
+import com.raysofthesun.poswebjava.agent.customer.constants.ContactType;
 import com.raysofthesun.poswebjava.agent.customer.feign.application.ApplyApplicationsApi;
 import com.raysofthesun.poswebjava.agent.customer.feign.application.models.ApiApplicationMeta;
 import com.raysofthesun.poswebjava.agent.customer.mappers.CustomerMapper;
 import com.raysofthesun.poswebjava.agent.customer.models.CustomerSummary;
+import com.raysofthesun.poswebjava.agent.customer.models.RawCustomer;
+import com.raysofthesun.poswebjava.agent.customer.models.person.Contact;
+import com.raysofthesun.poswebjava.agent.customer.models.person.ContactInfo;
 import com.raysofthesun.poswebjava.agent.exception.CustomerNotFoundException;
 import com.raysofthesun.poswebjava.agent.customer.models.Customer;
 import com.raysofthesun.poswebjava.agent.customer.repositories.CustomerRepository;
@@ -15,6 +19,8 @@ import reactor.core.publisher.Mono;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -27,15 +33,32 @@ public class CustomerService {
         this.applyApplicationsApi = applyApplicationsApi;
     }
 
-    public Mono<String> addCustomerWithAgentId(Customer customer, String agentId) {
+    public Mono<String> addCustomerWithAgentId(RawCustomer customer, String agentId) {
 
-        Mono<Customer> updateCustomerProperties = Mono.fromSupplier(() -> {
-            customer.setAgentId(agentId);
-            customer.getPersonalInfo().setAge(getCustomerAge(customer));
-            return customer;
-        });
 
-        return updateCustomerProperties
+        return Mono.fromSupplier(() -> {
+                    final Customer baseCustomer = CustomerMapper.MAPPER.mapRawCustomerToCustomer(customer);
+                    final int customerAge = getCustomerAge(baseCustomer);
+
+                    final Optional<Contact> primaryEmailAddress = customer.getEmailAddress().length() > 0
+                            ? Optional.of(new Contact(customer.getEmailAddress(), "", ContactType.PRIMARY_EMAIL))
+                            : Optional.empty();
+
+                    final Optional<Contact> primaryMobileNumber = customer.getEmailAddress().length() > 0
+                            ? Optional.of(new Contact(customer.getMobileNumber(), "", ContactType.PRIMARY_MOBILE))
+                            : Optional.empty();
+
+                    final ContactInfo customerContactInfo = new ContactInfo();
+
+                    primaryMobileNumber.ifPresent(contact -> customerContactInfo.setMobileNumbers(List.of(contact)));
+                    primaryEmailAddress.ifPresent(contact -> customerContactInfo.setEmailAddresses(List.of(contact)));
+
+                    baseCustomer.setAgentId(agentId);
+                    baseCustomer.setContactInfo(customerContactInfo);
+                    baseCustomer.getPersonalInfo().setAge(customerAge);
+
+                    return baseCustomer;
+                })
                 .flatMap(customerRepository::save)
                 .map(Customer::getId);
     }

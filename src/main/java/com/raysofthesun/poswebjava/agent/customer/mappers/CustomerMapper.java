@@ -3,6 +3,7 @@ package com.raysofthesun.poswebjava.agent.customer.mappers;
 import com.raysofthesun.poswebjava.agent.customer.constants.ContactType;
 import com.raysofthesun.poswebjava.agent.customer.models.Customer;
 import com.raysofthesun.poswebjava.agent.customer.models.CustomerSummary;
+import com.raysofthesun.poswebjava.agent.customer.models.RawCustomer;
 import com.raysofthesun.poswebjava.agent.customer.models.person.Contact;
 import com.raysofthesun.poswebjava.agent.customer.models.person.ContactInfo;
 import org.mapstruct.Mapper;
@@ -23,6 +24,15 @@ public interface CustomerMapper {
     @Mapping(source = "customer.contactInfo", target = "emailAddress", qualifiedByName = "emailAddress")
     @Mapping(source = "customer.contactInfo", target = "mobileNumber", qualifiedByName = "mobileNumber")
     CustomerSummary mapCustomerToCustomerSummary(Customer customer);
+
+
+    @Mapping(source = "title", target = "personalInfo.salutation")
+    @Mapping(source = "gender", target = "personalInfo.gender")
+    @Mapping(source = "lastName", target = "personalInfo.lastName")
+    @Mapping(source = "firstName", target = "personalInfo.firstName")
+    @Mapping(source = "middleName", target = "personalInfo.middleName")
+    @Mapping(source = "dateOfBirth", target = "personalInfo.dateOfBirth")
+    Customer mapRawCustomerToCustomer(RawCustomer rawCustomer);
 
     @Named("emailAddress")
     default String getCustomerEmailAddress(ContactInfo contactInfo) {

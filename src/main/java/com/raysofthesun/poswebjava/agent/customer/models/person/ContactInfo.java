@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -12,6 +13,6 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class ContactInfo {
-	private List<Contact> mobileNumbers;
-	private List<Contact> emailAddresses;
+	private List<Contact> mobileNumbers = new ArrayList<>();
+	private List<Contact> emailAddresses = new ArrayList<>();
 }

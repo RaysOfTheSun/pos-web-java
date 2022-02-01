@@ -3,6 +3,7 @@ package com.raysofthesun.poswebjava.agent.customer.controllers;
 import com.raysofthesun.poswebjava.agent.customer.feign.application.models.ApiApplicationMeta;
 import com.raysofthesun.poswebjava.agent.customer.models.Customer;
 import com.raysofthesun.poswebjava.agent.customer.models.CustomerSummary;
+import com.raysofthesun.poswebjava.agent.customer.models.RawCustomer;
 import com.raysofthesun.poswebjava.agent.customer.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +24,8 @@ public class CustomerController {
 
     @PutMapping("/{agentId}/customers")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<String> addCustomer(@PathVariable String agentId, @RequestBody Customer customer) {
-        return customerService.addCustomerWithAgentId(customer, agentId);
+    public Mono<String> addCustomer(@PathVariable String agentId, @RequestBody RawCustomer rawCustomer) {
+        return customerService.addCustomerWithAgentId(rawCustomer, agentId);
     }
 
     @GetMapping("/{agentId}/customers/{customerId}")

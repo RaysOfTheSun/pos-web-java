@@ -1,5 +1,6 @@
 package com.raysofthesun.poswebjava;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.Profile;
@@ -8,8 +9,8 @@ import org.springframework.context.annotation.Profile;
 @Profile("test")
 class PosWebJavaApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+//	@Test
+//	void contextLoads() {
+//	}
 
 }

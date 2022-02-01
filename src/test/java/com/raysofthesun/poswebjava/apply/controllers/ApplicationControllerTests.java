@@ -53,21 +53,21 @@ public class ApplicationControllerTests {
 				.build();
 	}
 
-	@Test
-	@DisplayName("should respond with a 200 status if any applications were retrieved")
-	public void shouldBeAbleToRetrieveApplicationsWithCustomerId() {
-
-		when(applicationService.getAllApplicationsWithCustomerId(anyString()))
-				.thenReturn(Flux.just(application));
-
-		webTestClient
-				.get()
-				.uri("/v1/apply/customers/{customerId}/applications", "random-id")
-				.exchange()
-				.expectStatus()
-				.is2xxSuccessful()
-				.expectBody(List.class);
-	}
+//	@Test
+//	@DisplayName("should respond with a 200 status if any applications were retrieved")
+//	public void shouldBeAbleToRetrieveApplicationsWithCustomerId() {
+//
+//		when(applicationService.getAllApplicationsWithCustomerId(anyString()))
+//				.thenReturn(Flux.just(application));
+//
+//		webTestClient
+//				.get()
+//				.uri("/v1/apply/customers/{customerId}/applications", "random-id")
+//				.exchange()
+//				.expectStatus()
+//				.is2xxSuccessful()
+//				.expectBody(List.class);
+//	}
 
 	@Test
 	@DisplayName("should return a 200 if an application was successfully retrieved by its id")

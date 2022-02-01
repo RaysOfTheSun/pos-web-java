@@ -12,6 +12,6 @@ public class WebMvcConfig implements WebFluxConfigurer {
 	public void addCorsMappings(CorsRegistry registry) {
 		registry.addMapping("/**")
 				.allowedOrigins("http://localhost:4200")
-				.allowedMethods("GET", "POST", "DELETE", "PATCH");
+				.allowedMethods("GET", "POST", "DELETE", "PATCH", "PUT");
 	}
 }

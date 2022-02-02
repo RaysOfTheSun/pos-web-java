@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.apply.feign.customer.models;
 
-import com.raysofthesun.poswebjava.agent.customer.constants.CustomerRelationship;
+import com.raysofthesun.poswebjava.customer.constants.CustomerRelationship;
 import lombok.Data;
 
 @Data

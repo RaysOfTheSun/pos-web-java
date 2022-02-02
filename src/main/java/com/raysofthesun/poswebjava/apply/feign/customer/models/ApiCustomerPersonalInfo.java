@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.apply.feign.customer.models;
 
-import com.raysofthesun.poswebjava.agent.customer.constants.PersonGender;
-import com.raysofthesun.poswebjava.agent.customer.constants.Salutation;
+import com.raysofthesun.poswebjava.customer.constants.PersonGender;
+import com.raysofthesun.poswebjava.customer.constants.Salutation;
 import lombok.Data;
 
 @Data

@@ -1,10 +1,10 @@
 package com.raysofthesun.poswebjava.agent.controllers;
 
 import com.raysofthesun.poswebjava.TestSecurityConfig;
-import com.raysofthesun.poswebjava.agent.customer.controllers.CustomerController;
-import com.raysofthesun.poswebjava.agent.customer.models.Customer;
-import com.raysofthesun.poswebjava.agent.customer.models.RawCustomer;
-import com.raysofthesun.poswebjava.agent.customer.services.CustomerService;
+import com.raysofthesun.poswebjava.customer.controllers.CustomerController;
+import com.raysofthesun.poswebjava.customer.models.Customer;
+import com.raysofthesun.poswebjava.customer.models.RawCustomer;
+import com.raysofthesun.poswebjava.customer.services.CustomerService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.apply.services;
 
-import com.raysofthesun.poswebjava.agent.customer.models.Customer;
+import com.raysofthesun.poswebjava.customer.models.Customer;
 import com.raysofthesun.poswebjava.apply.application.services.ApplicationService;
 import com.raysofthesun.poswebjava.apply.application.constants.ApplicationStatus;
 import com.raysofthesun.poswebjava.apply.insured.constants.InsuredRole;
@@ -23,7 +23,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.math.BigDecimal;
-import java.time.Instant;
 import java.util.List;
 
 import static org.mockito.Mockito.*;

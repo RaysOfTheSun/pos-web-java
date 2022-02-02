@@ -9,8 +9,8 @@ import org.springframework.context.annotation.Profile;
 @Profile("test")
 class PosWebJavaApplicationTests {
 
-//	@Test
-//	void contextLoads() {
-//	}
+    @Test
+    void contextLoads() {
+    }
 
 }

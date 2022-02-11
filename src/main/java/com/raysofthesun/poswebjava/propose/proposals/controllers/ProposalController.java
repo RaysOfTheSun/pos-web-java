@@ -3,11 +3,13 @@ package com.raysofthesun.poswebjava.propose.proposals.controllers;
 import com.raysofthesun.poswebjava.propose.feign.application.models.application.Application;
 import com.raysofthesun.poswebjava.propose.proposals.models.Proposal;
 import com.raysofthesun.poswebjava.propose.proposals.services.ProposalService;
+import io.swagger.annotations.Api;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+@Api(tags = "Proposal Related Processes")
 @RestController
 @RequestMapping("v1/propose")
 public class ProposalController {

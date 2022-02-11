@@ -5,6 +5,8 @@ import com.raysofthesun.poswebjava.customer.models.Customer;
 import com.raysofthesun.poswebjava.customer.models.CustomerSummary;
 import com.raysofthesun.poswebjava.customer.models.RawCustomer;
 import com.raysofthesun.poswebjava.customer.services.CustomerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -12,6 +14,7 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
+@Api(tags = "Customer Related Processes")
 @RestController
 @RequestMapping("v1/agents")
 public class CustomerController {
@@ -22,12 +25,14 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    @ApiOperation("Create A Customer")
     @PutMapping("/{agentId}/customers")
     @ResponseStatus(HttpStatus.CREATED)
     public Mono<String> addCustomer(@PathVariable String agentId, @RequestBody RawCustomer rawCustomer) {
         return customerService.addCustomerWithAgentId(rawCustomer, agentId);
     }
 
+    @ApiOperation("Get A Customer By Id and Agent Id")
     @GetMapping("/{agentId}/customers/{customerId}")
     public Mono<Customer> getCustomerByIdAndAgentId(@PathVariable String customerId, @PathVariable String agentId) {
         return customerService.getCustomerByIdAndAgentId(customerId, agentId);
@@ -62,6 +67,7 @@ public class CustomerController {
         return customerService.getCustomersByIdWithAgentId(agentId, ids);
     }
 
+    @ApiOperation("Get Customer Count By Agent Id")
     @GetMapping("/{agentId}/customer-count")
     public Mono<Integer> getAllCustomerCountByAgentIdAndDeletedStatus(@PathVariable String agentId,
                                                                       @RequestParam boolean deleted) {

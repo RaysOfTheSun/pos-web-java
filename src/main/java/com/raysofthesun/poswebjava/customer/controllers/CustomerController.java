@@ -40,7 +40,7 @@ public class CustomerController {
 
     @PatchMapping("/{agentId}/customers/{customerId}")
     public Mono<String> updateCustomer(@PathVariable String agentId, @PathVariable String customerId,
-                                       @RequestBody Customer customer) {
+                                       @RequestBody RawCustomer customer) {
         return customerService.updateCustomer(customerId, agentId, customer);
     }
 

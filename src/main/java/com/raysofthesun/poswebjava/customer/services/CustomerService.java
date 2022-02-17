@@ -44,15 +44,21 @@ public class CustomerService {
                 .switchIfEmpty(Mono.error(new CustomerNotFoundException()));
     }
 
-    public Mono<String> updateCustomer(String customerId, String agentId, Customer customer) {
+    public Mono<String> updateCustomer(String customerId, String agentId, RawCustomer customer) {
         return customerRepository
                 .existsCustomersByAgentIdAndId(agentId, customerId)
-                .flatMap((isExistingCustomer) -> isExistingCustomer ? Mono.just(customer)
-                        : Mono.error(new CustomerNotFoundException()))
+                .flatMap((isExistingCustomer) -> {
+                    if (isExistingCustomer) {
+                        final Customer updatedCustomer = CustomerMapper.MAPPER.mapRawCustomerToCustomer(customer);
+                        return Mono.just(updatedCustomer);
+                    }
+
+                    return Mono.error(new CustomerNotFoundException());
+                })
                 .flatMap(updatedCustomer -> {
                     updatedCustomer.setId(customerId);
                     updatedCustomer.setAgentId(agentId);
-                    updatedCustomer.getPersonalInfo().setAge(getCustomerAge(customer));
+                    updatedCustomer.getPersonalInfo().setAge(getCustomerAge(updatedCustomer));
                     return customerRepository.save(updatedCustomer);
                 })
                 .map(Customer::getId);

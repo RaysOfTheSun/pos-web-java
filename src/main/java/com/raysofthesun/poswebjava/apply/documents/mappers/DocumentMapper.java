@@ -13,13 +13,19 @@ import java.util.Optional;
 public interface DocumentMapper {
     DocumentMapper MAPPER = Mappers.getMapper(DocumentMapper.class);
 
-    @Mapping(source = "fsFile", target = "ownerId", qualifiedByName = "metaToOwnerId")
-    @Mapping(source = "fsFile", target = "uploadDate", qualifiedByName = "metaToUploadDate")
-    @Mapping(source = "fsFile", target = "fileName", qualifiedByName = "metaToFileName")
-    @Mapping(source = "fsFile", target = "documentId", qualifiedByName = "metaToDocumentId")
-    @Mapping(source = "fsFile", target = "documentType", qualifiedByName = "metaToDocumentType")
-    @Mapping(source = "fsFile", target = "documentGroup", qualifiedByName = "metaToDocumentGroup")
+    @Mapping(source = ".", target = "ownerId", qualifiedByName = "metaToOwnerId")
+    @Mapping(source = ".", target = "uploadDate", qualifiedByName = "metaToUploadDate")
+    @Mapping(source = ".", target = "fileName", qualifiedByName = "metaToFileName")
+    @Mapping(source = ".", target = "documentId", qualifiedByName = "metaToDocumentId")
+    @Mapping(source = ".", target = "documentType", qualifiedByName = "metaToDocumentType")
+    @Mapping(source = ".", target = "documentGroup", qualifiedByName = "metaToDocumentGroup")
+    @Mapping(source = ".", target = "documentIndex", qualifiedByName = "metaToDocumentIndex")
     ApplicationDocumentMeta mapGridFsFileToDocumentMeta(GridFSFile fsFile);
+
+    @Named("metaToDocumentIndex")
+    default String fsFileMetadataToDocumentIndex(GridFSFile fsFile) {
+        return fsFile.getMetadata().getString("documentIndex");
+    }
 
     @Named("metaToDocumentId")
     default String fsFileMetadataToDocumentId(GridFSFile fsFile) {

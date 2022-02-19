@@ -13,4 +13,5 @@ public class ApplicationDocumentMeta {
     private String uploadDate;
     private String documentType;
     private String documentGroup;
+    private String documentIndex;
 }

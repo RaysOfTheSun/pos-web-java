@@ -1,8 +1,8 @@
 spring:
   application:
     name: pos
-  codec:
-    max-in-memory-size: 200MB
+#  codec:
+#    max-in-memory-size: 200MB
   data:
     mongodb:
       uri: mongodb://localhost:27017/pos
@@ -10,8 +10,8 @@ spring:
     active: local
 pos:
   feign:
-    applyServiceBaseUrl: "localhost:9000/v1/apply"
-    agentServiceBaseUrl: "localhost:9000/v1/agents"
+    applyServiceBaseUrl: "localhost:${server.port}/v1/apply/"
+    agentServiceBaseUrl: "localhost:${server.port}/v1/agents/"
   auth:
     server:
       url: http://localhost:8080

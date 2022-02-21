@@ -133,6 +133,7 @@ public class Customer extends Person {
             final ContactInfo contactInfo = new ContactInfo();
             final PersonalInfo personalInfo = new PersonalInfo(lastName, firstName, middleName,
                     salutation, age, dateOfBirth, gender);
+            final IncomeSource incomeSource = new IncomeSource(occupation);
 
             primaryMobileNumber.ifPresent(contact -> contactInfo.setMobileNumbers(List.of(contact)));
             primaryEmailAddress.ifPresent(contact -> contactInfo.setEmailAddresses(List.of(contact)));
@@ -143,6 +144,7 @@ public class Customer extends Person {
             customer.setContactInfo(contactInfo);
             customer.setPersonalInfo(personalInfo);
             customer.setRelationshipWithCustomer(CustomerRelationship.SELF);
+            customer.setIncomeSource(incomeSource);
 
             return customer;
         }

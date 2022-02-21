@@ -66,33 +66,13 @@ public class CustomerServiceTests {
         }
 
         @Test
-        @DisplayName("should be able to correctly compute the age of a given customer")
-        public void shouldComputeAgeCorrectly() {
-            when(repository.save(any(Customer.class)))
-                    .thenAnswer(invocationOnMock -> Mono.just(invocationOnMock.getArgument(0)));
-            when(repository.existsCustomersByAgentIdAndId(anyString(), anyString()))
-                    .thenReturn(Mono.just(true));
-
-            Customer customer = Customer.fromRawCustomer(rawCustomer, "001").build();
-
-            StepVerifier.create(customerService.updateCustomer("ID", "001", customer))
-                    .consumeNextWith((id) -> assertAll(
-                            () -> assertNotEquals(0, customer.getPersonalInfo().getAge()),
-                            () -> assertNotEquals(-1, customer.getPersonalInfo().getAge()),
-                            () -> assertEquals(id, customer.getId())
-                    ))
-                    .verifyComplete();
-
-        }
-
-        @Test
         @DisplayName("should throw an exception when attempting to update a non-existent customer")
         public void shouldThrowIfUpdatingNonExistentCustomer() {
             when(repository.existsCustomersByAgentIdAndId(anyString(), anyString()))
                     .thenReturn(Mono.just(false));
 
             StepVerifier
-                    .create(customerService.updateCustomer("0", "0", new Customer()))
+                    .create(customerService.updateCustomer("0", "0", new RawCustomer()))
                     .expectError(CustomerNotFoundException.class)
                     .verify();
         }

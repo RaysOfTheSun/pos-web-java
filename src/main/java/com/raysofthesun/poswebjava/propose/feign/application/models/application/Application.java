@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.feign.application.models.application;
 
-import com.raysofthesun.poswebjava.apply.application.constants.ApplicationStatus;
+import com.raysofthesun.poswebjava.apply2.insureds.enums.ApplicationStatus;
 import com.raysofthesun.poswebjava.propose.feign.application.models.insured.Insured;
 import lombok.Data;
 

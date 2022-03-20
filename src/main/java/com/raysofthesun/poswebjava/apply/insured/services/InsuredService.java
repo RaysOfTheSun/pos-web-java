@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.apply.insured.services;
 
-import com.raysofthesun.poswebjava.apply.insured.models.insured.Insured;
-import com.raysofthesun.poswebjava.apply.insured.repositories.InsuredRepository;
+import com.raysofthesun.poswebjava.apply2.insureds.models.core.insured.Insured;
+import com.raysofthesun.poswebjava.apply2.insureds.repositories.InsuredRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -28,6 +28,5 @@ public class InsuredService {
 		return insuredRepository
 				.saveAll(insureds)
 				.then(Mono.just(true));
-
 	}
 }

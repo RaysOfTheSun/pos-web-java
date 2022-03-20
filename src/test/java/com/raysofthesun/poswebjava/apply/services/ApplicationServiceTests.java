@@ -1,17 +1,17 @@
 package com.raysofthesun.poswebjava.apply.services;
 
 import com.raysofthesun.poswebjava.customer.models.Customer;
-import com.raysofthesun.poswebjava.apply.application.services.ApplicationService;
-import com.raysofthesun.poswebjava.apply.application.constants.ApplicationStatus;
-import com.raysofthesun.poswebjava.apply.insured.constants.InsuredRole;
-import com.raysofthesun.poswebjava.apply.feign.customer.CustomerApi;
-import com.raysofthesun.poswebjava.apply.feign.customer.models.ApiCustomer;
+import com.raysofthesun.poswebjava.apply2.applications.services.core.ApplicationService;
+import com.raysofthesun.poswebjava.apply2.insureds.enums.ApplicationStatus;
+import com.raysofthesun.poswebjava.apply2.insureds.enums.InsuredRole;
+import com.raysofthesun.poswebjava.apply2.feign.CustomerApi;
+import com.raysofthesun.poswebjava.apply2.feign.models.ApiCustomer;
 import com.raysofthesun.poswebjava.apply.insured.services.InsuredService;
-import com.raysofthesun.poswebjava.apply.application.models.Application;
-import com.raysofthesun.poswebjava.apply.application.models.ApplicationCreationRequest;
-import com.raysofthesun.poswebjava.apply.application.models.ApplicationMeta;
-import com.raysofthesun.poswebjava.apply.insured.models.insured.Insured;
-import com.raysofthesun.poswebjava.apply.application.repositories.ApplicationRepository;
+import com.raysofthesun.poswebjava.apply2.applications.models.core.application.Application;
+import com.raysofthesun.poswebjava.apply2.applications.models.core.application.ApplicationCreationRequest;
+import com.raysofthesun.poswebjava.apply2.applications.models.core.application.ApplicationMeta;
+import com.raysofthesun.poswebjava.apply2.insureds.models.core.insured.Insured;
+import com.raysofthesun.poswebjava.apply2.applications.repositories.core.ApplicationRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

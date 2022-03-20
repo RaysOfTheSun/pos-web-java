@@ -1,23 +1,17 @@
 package com.raysofthesun.poswebjava.apply.documents.controllers;
 
 import com.raysofthesun.poswebjava.apply.documents.models.ApplicationDocumentSource;
-import com.raysofthesun.poswebjava.apply.documents.models.RawDocumentMetadata;
 import com.raysofthesun.poswebjava.apply.documents.models.DocumentUploadRequest;
 import com.raysofthesun.poswebjava.apply.documents.models.SupportingDocument;
 import com.raysofthesun.poswebjava.apply.documents.services.SupportingDocumentService;
 import io.swagger.annotations.Api;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.http.codec.ServerSentEvent;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Map;
-import static org.springframework.data.mongodb.core.query.Query.*;
-import static org.springframework.data.mongodb.core.query.Criteria.*;
 
 @Api(tags = "Apply Document Upload Processes")
 @RestController

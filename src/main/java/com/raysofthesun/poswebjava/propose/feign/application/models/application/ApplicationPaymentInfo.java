@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.propose.feign.application.models.application;
 
-import com.raysofthesun.poswebjava.apply2.applications.emums.ApplicationPaymentMethod;
-import com.raysofthesun.poswebjava.apply2.applications.emums.ApplicationRenewalMethod;
+import com.raysofthesun.poswebjava.apply.applications.emums.ApplicationPaymentMethod;
+import com.raysofthesun.poswebjava.apply.applications.emums.ApplicationRenewalMethod;
 import lombok.Data;
 
 @Data

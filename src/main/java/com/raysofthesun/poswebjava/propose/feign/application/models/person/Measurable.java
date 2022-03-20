@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.feign.application.models.person;
 
-import com.raysofthesun.poswebjava.apply2.insureds.enums.MeasurementUnit;
+import com.raysofthesun.poswebjava.apply.insureds.enums.MeasurementUnit;
 import lombok.Data;
 
 @Data

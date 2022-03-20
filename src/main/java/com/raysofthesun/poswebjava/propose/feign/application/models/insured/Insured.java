@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.feign.application.models.insured;
 
-import com.raysofthesun.poswebjava.apply2.insureds.enums.InsuredRole;
+import com.raysofthesun.poswebjava.apply.insureds.enums.InsuredRole;
 import com.raysofthesun.poswebjava.propose.feign.application.models.person.Person;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

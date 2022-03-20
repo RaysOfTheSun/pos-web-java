@@ -2,7 +2,7 @@ package com.raysofthesun.poswebjava.propose.proposals.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.raysofthesun.poswebjava.propose.proposals.constants.ProposalStatus;
+import com.raysofthesun.poswebjava.propose.proposals.enums.ProposalStatus;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
 

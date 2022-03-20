@@ -1,6 +1,7 @@
 package com.raysofthesun.poswebjava.core.factories;
 
 import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.exceptions.MarketNotSupportedException;
 import com.raysofthesun.poswebjava.core.services.PosWebService;
 
 import javax.annotation.PostConstruct;
@@ -26,6 +27,12 @@ public abstract class PosWebServiceFactory<S extends PosWebService> {
     }
 
     public S getServiceForMarket(Market market) {
-        return this.serviceMap.get(market);
+        S service = this.serviceMap.getOrDefault(market, null);
+
+        if (service == null) {
+            throw new MarketNotSupportedException();
+        }
+
+        return service;
     }
 }

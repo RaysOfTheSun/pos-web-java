@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.feign.application.models.application;
 
-import com.raysofthesun.poswebjava.apply2.insureds.enums.ApplicationStatus;
+import com.raysofthesun.poswebjava.apply.insureds.enums.ApplicationStatus;
 import com.raysofthesun.poswebjava.propose.proposals.models.Proposal;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;

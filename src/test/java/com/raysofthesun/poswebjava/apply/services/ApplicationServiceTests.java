@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.apply.services;
 
-import com.raysofthesun.poswebjava.customer.models.Customer;
+import com.raysofthesun.poswebjava.customer2.models.Customer;
 import com.raysofthesun.poswebjava.apply2.applications.services.core.ApplicationService;
 import com.raysofthesun.poswebjava.apply2.insureds.enums.ApplicationStatus;
 import com.raysofthesun.poswebjava.apply2.insureds.enums.InsuredRole;

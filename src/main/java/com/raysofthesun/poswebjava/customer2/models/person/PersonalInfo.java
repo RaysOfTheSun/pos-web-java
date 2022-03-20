@@ -1,11 +1,15 @@
-package com.raysofthesun.poswebjava.apply2.feign.models;
+package com.raysofthesun.poswebjava.customer2.models.person;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.raysofthesun.poswebjava.customer2.enums.PersonGender;
 import com.raysofthesun.poswebjava.customer2.enums.Salutation;
-import lombok.Data;
+import lombok.*;
 
-@Data
-public class ApiCustomerPersonalInfo {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class PersonalInfo {
 	private String lastName;
 
 	private String firstName;
@@ -14,6 +18,7 @@ public class ApiCustomerPersonalInfo {
 
 	private Salutation salutation;
 
+	@JsonProperty(access = JsonProperty.Access.READ_ONLY)
 	private int age;
 
 	private String dateOfBirth;

@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.apply2.insureds.models.core.person;
 
-import com.raysofthesun.poswebjava.customer.constants.PersonGender;
-import com.raysofthesun.poswebjava.customer.constants.Salutation;
+import com.raysofthesun.poswebjava.customer2.enums.PersonGender;
+import com.raysofthesun.poswebjava.customer2.enums.Salutation;
 import lombok.Data;
 
 @Data

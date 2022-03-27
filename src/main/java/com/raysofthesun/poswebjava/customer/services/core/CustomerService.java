@@ -82,12 +82,12 @@ public abstract class CustomerService implements PosWebService {
                 );
     }
 
-    public Flux<ApiApplicationMeta> getApplicationsForCustomer(String customerId, int pageIndex) {
-        return this.applyApplicationsApi.getApplicationsByCustomerId(customerId, pageIndex);
+    public Flux<ApiApplicationMeta> getApplicationsForCustomer(Market market, String customerId, int pageIndex, String token) {
+        return this.applyApplicationsApi.getApplicationsByCustomerId(market, customerId, pageIndex);
     }
 
-    public Mono<Integer> getCustomerApplicationCount(String customerId) {
-        return this.applyApplicationsApi.getTotalApplicationCountForCustomerById(customerId);
+    public Mono<Integer> getCustomerApplicationCount(Market market, String customerId, String token) {
+        return this.applyApplicationsApi.getTotalApplicationCountForCustomerById(market, customerId);
     }
 
     public Flux<Customer> getCustomersByIdWithAgentId(String agentId, Collection<String> customerIds) {

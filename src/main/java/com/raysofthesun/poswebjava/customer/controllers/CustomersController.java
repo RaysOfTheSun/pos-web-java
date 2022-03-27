@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 @Api(tags = "Customer Related Processes")
 @RestController
@@ -101,17 +102,19 @@ public class CustomersController {
     public Flux<ApiApplicationMeta> getApplicationsForCustomerWithId(@PathVariable String agentId,
                                                                      @PathVariable String customerId,
                                                                      @PathVariable Market market,
-                                                                     @RequestParam int index
+                                                                     @RequestParam int index,
+                                                                     @RequestHeader("Authorization") String token
     ) {
         return this.customerServiceFactory
                 .getServiceForMarket(market)
-                .getApplicationsForCustomer(customerId, index);
+                .getApplicationsForCustomer(market, customerId, index, token);
     }
 
     @GetMapping("{market}/{agentId}/customers/{customerId}/application-count")
-    public Mono<Integer> getCustomerApplicationCount(@PathVariable String customerId, @PathVariable Market market) {
+    public Mono<Integer> getCustomerApplicationCount(@PathVariable String customerId, @PathVariable Market market,
+                                                     @RequestHeader("Authorization") String authnHeader) {
         return this.customerServiceFactory
                 .getServiceForMarket(market)
-                .getCustomerApplicationCount(customerId);
+                .getCustomerApplicationCount(market, customerId, authnHeader);
     }
 }

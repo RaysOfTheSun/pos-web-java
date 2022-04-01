@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.customer.services.marketCor;
 
-import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.customer.services.core.CustomerCreatorService;
 import org.springframework.stereotype.Service;
 

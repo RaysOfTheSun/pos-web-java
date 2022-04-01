@@ -3,7 +3,7 @@ package com.raysofthesun.poswebjava.apply.insureds.services.marketCor;
 import com.raysofthesun.poswebjava.apply.insureds.repositories.InsuredRepository;
 import com.raysofthesun.poswebjava.apply.insureds.services.core.ApplicationInsuredService;
 import com.raysofthesun.poswebjava.apply.feign.CustomerApi;
-import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
 import org.springframework.stereotype.Service;
 
 @Service

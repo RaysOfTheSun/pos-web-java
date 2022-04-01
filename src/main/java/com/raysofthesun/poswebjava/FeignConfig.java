@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Getter
 @Setter
 @Configuration
-@ConfigurationProperties(prefix = "pos.feign")
+@ConfigurationProperties(prefix = "pos-feign")
 public class FeignConfig {
 	private String agentServiceBaseUrl;
 	private String applyServiceBaseUrl;

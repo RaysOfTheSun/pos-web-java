@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.proposals.services.marketCor;
 
-import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.propose.feign.application.ApplyApplicationApi;
 import com.raysofthesun.poswebjava.propose.proposals.repositories.ProposalRepository;
 import com.raysofthesun.poswebjava.propose.proposals.factories.ProposalCreatorServiceFactory;

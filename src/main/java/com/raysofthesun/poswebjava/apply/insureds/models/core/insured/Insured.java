@@ -14,5 +14,5 @@ public class Insured extends Person {
 
 	InsuredRole role;
 
-	InsuredIdentificationInfo identificationInfo;
+	InsuredIdentificationInfo identificationInfo = new InsuredIdentificationInfo();
 }

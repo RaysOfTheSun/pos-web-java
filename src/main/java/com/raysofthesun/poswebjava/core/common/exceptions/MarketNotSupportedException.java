@@ -1,4 +1,4 @@
-package com.raysofthesun.poswebjava.core.exceptions;
+package com.raysofthesun.poswebjava.core.common.exceptions;
 
 public class MarketNotSupportedException extends RuntimeException {
     public MarketNotSupportedException() {

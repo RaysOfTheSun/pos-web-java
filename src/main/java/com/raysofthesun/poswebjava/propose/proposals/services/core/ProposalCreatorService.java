@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.proposals.services.core;
 
-import com.raysofthesun.poswebjava.core.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import com.raysofthesun.poswebjava.propose.proposals.exceptions.CannotFinalizeProposalException;
 import com.raysofthesun.poswebjava.propose.feign.application.models.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.propose.proposals.enums.ProposalStatus;

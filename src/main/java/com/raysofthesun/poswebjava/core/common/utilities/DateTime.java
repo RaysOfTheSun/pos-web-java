@@ -1,4 +1,4 @@
-package com.raysofthesun.poswebjava.core.utilities;
+package com.raysofthesun.poswebjava.core.common.utilities;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;

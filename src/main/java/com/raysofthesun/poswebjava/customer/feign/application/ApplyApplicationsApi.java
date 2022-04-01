@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.customer.feign.application;
 
 
-import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.customer.feign.application.models.ApiApplicationMeta;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

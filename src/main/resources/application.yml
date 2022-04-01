@@ -4,12 +4,11 @@ spring:
   data:
     mongodb:
       uri: mongodb://localhost:27017/pos
-pos:
-  feign:
-    applyServiceBaseUrl: "localhost:${server.port}/v1/apply/"
-    agentServiceBaseUrl: "localhost:${server.port}/v1/agents/"
-  auth:
-    server:
-      url: http://localhost:8080
 server:
   port: 9000
+pos-feign:
+  applyServiceBaseUrl: "localhost:${server.port}/v1/apply/"
+  agentServiceBaseUrl: "localhost:${server.port}/v1/agents/"
+pos-auth:
+  server:
+    url: http://localhost:8080

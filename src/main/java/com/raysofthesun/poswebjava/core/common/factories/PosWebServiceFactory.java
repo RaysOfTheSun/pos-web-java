@@ -1,8 +1,8 @@
-package com.raysofthesun.poswebjava.core.factories;
+package com.raysofthesun.poswebjava.core.common.factories;
 
-import com.raysofthesun.poswebjava.core.enums.Market;
-import com.raysofthesun.poswebjava.core.exceptions.MarketNotSupportedException;
-import com.raysofthesun.poswebjava.core.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.common.exceptions.MarketNotSupportedException;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 
 import javax.annotation.PostConstruct;
 import java.util.List;

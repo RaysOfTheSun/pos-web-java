@@ -1,8 +1,8 @@
 package com.raysofthesun.poswebjava.customer.services.core;
 
-import com.raysofthesun.poswebjava.core.enums.Market;
-import com.raysofthesun.poswebjava.core.services.PosWebService;
-import com.raysofthesun.poswebjava.core.utilities.DateTime;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.utilities.DateTime;
 import com.raysofthesun.poswebjava.customer.mappers.CustomerMapper;
 import com.raysofthesun.poswebjava.customer.models.Customer;
 import com.raysofthesun.poswebjava.customer.models.CustomerSummary;

@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.feign.application;
 
-import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.propose.feign.application.models.application.Application;
 import com.raysofthesun.poswebjava.propose.feign.application.models.application.ApplicationCreationRequest;
 import feign.Param;

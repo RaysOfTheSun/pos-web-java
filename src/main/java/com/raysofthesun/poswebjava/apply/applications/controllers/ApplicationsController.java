@@ -4,7 +4,8 @@ import com.raysofthesun.poswebjava.apply.applications.factories.ApplicationServi
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.Application;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationMeta;
-import com.raysofthesun.poswebjava.core.enums.Market;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.configuration.models.PosDocumentRequirement;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 @Api(tags = "Apply Application Processes")
@@ -68,5 +71,14 @@ public class ApplicationsController {
         return this.serviceFactory
                 .getServiceForMarket(market)
                 .getTotalApplicationCountForCustomerById(customerId);
+    }
+
+    @ApiOperation("Get the document requirements per insured")
+    @GetMapping("/{market}/applications/{applicationId}/doc-reqs")
+    public Mono<Map<String, List<PosDocumentRequirement>>> getDocumentReqsByApplicationId(@PathVariable String applicationId,
+                                                                                                    @PathVariable Market market) {
+        return this.serviceFactory
+                .getServiceForMarket(market)
+                .getDocumentRequirementsForInsuredById(applicationId, market);
     }
 }

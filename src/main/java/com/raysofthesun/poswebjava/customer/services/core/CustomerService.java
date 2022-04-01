@@ -1,8 +1,8 @@
 package com.raysofthesun.poswebjava.customer.services.core;
 
 import com.raysofthesun.poswebjava.customer.exceptions.CustomerNotFoundException;
-import com.raysofthesun.poswebjava.core.enums.Market;
-import com.raysofthesun.poswebjava.core.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import com.raysofthesun.poswebjava.customer.feign.application.ApplyApplicationsApi;
 import com.raysofthesun.poswebjava.customer.feign.application.models.ApiApplicationMeta;
 import com.raysofthesun.poswebjava.customer.models.Customer;

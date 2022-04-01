@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.customer.factories;
 
-import com.raysofthesun.poswebjava.core.factories.PosWebServiceFactory;
+import com.raysofthesun.poswebjava.core.common.factories.PosWebServiceFactory;
 import com.raysofthesun.poswebjava.customer.services.core.CustomerCreatorService;
 import org.springframework.stereotype.Component;
 

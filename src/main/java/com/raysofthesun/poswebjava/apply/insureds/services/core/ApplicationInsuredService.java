@@ -7,8 +7,8 @@ import com.raysofthesun.poswebjava.apply.insureds.models.core.insured.Insured;
 import com.raysofthesun.poswebjava.apply.insureds.repositories.InsuredRepository;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationMeta;
-import com.raysofthesun.poswebjava.core.enums.Market;
-import com.raysofthesun.poswebjava.core.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -26,8 +26,8 @@ public abstract class ApplicationInsuredService implements PosWebService {
         this.insuredRepository = insuredRepository;
     }
 
-    public Flux<Insured> getInsuredsById(Collection<String> insuredIds) {
-        return insuredRepository.findAllById(insuredIds);
+    public Mono<Insured> getInsuredById(String insuredId) {
+        return insuredRepository.findById(insuredId);
     }
 
     public Mono<Insured> saveInsured(Insured insured) {

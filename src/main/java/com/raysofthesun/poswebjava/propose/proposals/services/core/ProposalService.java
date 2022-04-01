@@ -1,7 +1,7 @@
 package com.raysofthesun.poswebjava.propose.proposals.services.core;
 
-import com.raysofthesun.poswebjava.core.enums.Market;
-import com.raysofthesun.poswebjava.core.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import com.raysofthesun.poswebjava.propose.proposals.exceptions.FailedToFinalizeProposalException;
 import com.raysofthesun.poswebjava.propose.proposals.exceptions.ProposeApiException;
 import com.raysofthesun.poswebjava.propose.feign.application.ApplyApplicationApi;

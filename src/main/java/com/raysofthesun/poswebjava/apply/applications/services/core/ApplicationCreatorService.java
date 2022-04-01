@@ -5,8 +5,8 @@ import com.raysofthesun.poswebjava.apply.insureds.models.core.insured.Insured;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.Application;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationCreationRequest;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationMeta;
-import com.raysofthesun.poswebjava.core.enums.Market;
-import com.raysofthesun.poswebjava.core.services.PosWebService;
+import com.raysofthesun.poswebjava.core.common.enums.Market;
+import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import reactor.core.publisher.Mono;
 
 import java.util.List;

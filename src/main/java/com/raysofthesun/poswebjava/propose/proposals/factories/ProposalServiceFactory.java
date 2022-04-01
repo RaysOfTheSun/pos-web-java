@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.propose.proposals.factories;
 
-import com.raysofthesun.poswebjava.core.factories.PosWebServiceFactory;
+import com.raysofthesun.poswebjava.core.common.factories.PosWebServiceFactory;
 import com.raysofthesun.poswebjava.propose.proposals.services.core.ProposalService;
 import org.springframework.stereotype.Component;
 

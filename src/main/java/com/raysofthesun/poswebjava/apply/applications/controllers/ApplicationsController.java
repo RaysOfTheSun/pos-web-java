@@ -72,13 +72,4 @@ public class ApplicationsController {
                 .getServiceForMarket(market)
                 .getTotalApplicationCountForCustomerById(customerId);
     }
-
-    @ApiOperation("Get the document requirements per insured")
-    @GetMapping("/{market}/applications/{applicationId}/doc-reqs")
-    public Mono<Map<String, List<PosDocumentRequirement>>> getDocumentReqsByApplicationId(@PathVariable String applicationId,
-                                                                                                    @PathVariable Market market) {
-        return this.serviceFactory
-                .getServiceForMarket(market)
-                .getDocumentRequirementsForInsuredById(applicationId, market);
-    }
 }

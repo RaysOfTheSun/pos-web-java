@@ -2,6 +2,7 @@ package com.raysofthesun.poswebjava.apply.documents.mappers;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.raysofthesun.poswebjava.apply.documents.models.ApplicationDocumentMeta;
+import com.raysofthesun.poswebjava.apply.documents2.models.ApplySupportingDocumentMetadata;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
@@ -20,7 +21,7 @@ public interface DocumentMapper {
     @Mapping(source = ".", target = "documentType", qualifiedByName = "metaToDocumentType")
     @Mapping(source = ".", target = "documentGroup", qualifiedByName = "metaToDocumentGroup")
     @Mapping(source = ".", target = "documentIndex", qualifiedByName = "metaToDocumentIndex")
-    ApplicationDocumentMeta mapGridFsFileToDocumentMeta(GridFSFile fsFile);
+    ApplySupportingDocumentMetadata mapGridFsFileToDocumentMeta(GridFSFile fsFile);
 
     @Named("metaToDocumentIndex")
     default String fsFileMetadataToDocumentIndex(GridFSFile fsFile) {

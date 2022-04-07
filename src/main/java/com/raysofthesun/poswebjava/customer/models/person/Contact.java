@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.customer.models.person;
 
-import com.raysofthesun.poswebjava.customer.constants.ContactType;
+import com.raysofthesun.poswebjava.customer.enums.ContactType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

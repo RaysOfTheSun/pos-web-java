@@ -1,18 +1,26 @@
 package com.raysofthesun.poswebjava.customer.feign.application;
 
 
+import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.customer.feign.application.models.ApiApplicationMeta;
-import feign.Param;
-import feign.RequestLine;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 public interface ApplyApplicationsApi {
 
-    @RequestLine("GET /customers/{customerId}/application-metas")
-    Flux<ApiApplicationMeta> getApplicationsByCustomerId(@Param("customerId") String customerId,
-                                                         @Param("index") int index);
+    @GetMapping(path = "/{market}/customers/{customerId}/application-metas")
+    Flux<ApiApplicationMeta> getApplicationsByCustomerId(
+            @PathVariable("market") Market market,
+            @PathVariable("customerId") String customerId,
+            @RequestParam("index") int index
+    );
 
-    @RequestLine("GET /customers/{customerId}/application-count")
-    Mono<Integer> getTotalApplicationCountForCustomerById(@Param("customerId") String customerId);
+    @GetMapping("{market}/customers/{customerId}/application-count")
+    Mono<Integer> getTotalApplicationCountForCustomerById(
+            @PathVariable("market") Market market,
+            @PathVariable("customerId") String customerId
+    );
 }

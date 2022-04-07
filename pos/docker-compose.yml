@@ -1,0 +1,40 @@
+version: "3.9"
+services:
+  pos-postgres:
+    image: postgres
+    environment:
+      POSTGRES_DB: pos_agents
+      POSTGRES_USER: pos
+      POSTGRES_HOST_AUTH_METHOD: trust
+  pos-keycloak:
+    image: jboss/keycloak
+    environment:
+      DB_USER: pos
+      DB_ADDR: pos-postgres
+      DB_VENDOR: postgres
+      DB_DATABASE: pos_agents
+      KEYCLOAK_USER: admin
+      ROOT_LOGLEVEL: DEBUG
+      KEYCLOAK_PASSWORD: admin
+      KEYCLOAK_LOGLEVEL: DEBUG
+      PROXY_ADDRESS_FORWARDING: "true"
+    ports:
+      - "8080:8080"
+    depends_on:
+      - pos-postgres
+  pos-db:
+    image: mongo
+    container_name: "pos-db"
+    ports:
+      - "27017:27017"
+  pos-java:
+    build:
+      context: ../
+    ports:
+      - "9000:9000"
+    depends_on:
+      - pos-db
+      - pos-keycloak
+    container_name: pos-web-java
+    environment:
+      SPRING_PROFILES_ACTIVE: docker-local,secure

@@ -1,6 +1,6 @@
 package com.raysofthesun.poswebjava.customer.mappers;
 
-import com.raysofthesun.poswebjava.customer.constants.ContactType;
+import com.raysofthesun.poswebjava.customer.enums.ContactType;
 import com.raysofthesun.poswebjava.customer.models.Customer;
 import com.raysofthesun.poswebjava.customer.models.CustomerSummary;
 import com.raysofthesun.poswebjava.customer.models.RawCustomer;

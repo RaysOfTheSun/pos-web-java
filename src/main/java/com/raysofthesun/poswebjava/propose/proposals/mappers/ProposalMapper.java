@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 @Mapper
 public interface ProposalMapper {
-	ProposalMapper PROPOSAL_MAPPER = Mappers.getMapper(ProposalMapper.class);
+	ProposalMapper MAPPER = Mappers.getMapper(ProposalMapper.class);
 
 	@Mapping(source = "ownerId", target = "policyOwnerId")
 	@Mapping(source = "insuredId", target = "primaryInsuredId")

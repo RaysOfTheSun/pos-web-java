@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.4</version>
+        <version>2.6.4</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.raysofthesun</groupId>
@@ -17,7 +17,7 @@
         <java.version>11</java.version>
         <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
         <org.projectlombok.version>1.18.20</org.projectlombok.version>
-        <com.playtika.reactivefeign.version>3.1.1</com.playtika.reactivefeign.version>
+        <com.playtika.reactivefeign.version>3.2.0</com.playtika.reactivefeign.version>
     </properties>
     <dependencies>
         <dependency>
@@ -67,24 +67,15 @@
         <!-- feign -->
         <dependency>
             <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor</artifactId>
+            <artifactId>feign-reactor-spring-cloud-starter</artifactId>
             <version>${com.playtika.reactivefeign.version}</version>
             <type>pom</type>
         </dependency>
         <dependency>
             <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-core</artifactId>
+            <artifactId>feign-reactor-bom</artifactId>
             <version>${com.playtika.reactivefeign.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-webclient</artifactId>
-            <version>${com.playtika.reactivefeign.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.playtika.reactivefeign</groupId>
-            <artifactId>feign-reactor-cloud</artifactId>
-            <version>${com.playtika.reactivefeign.version}</version>
+            <type>pom</type>
         </dependency>
 
         <!-- processors  -->

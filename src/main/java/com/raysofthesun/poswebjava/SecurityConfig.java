@@ -7,6 +7,8 @@ import org.springframework.security.config.annotation.web.reactive.EnableWebFlux
 import org.springframework.security.config.web.server.ServerHttpSecurity;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 
+import java.util.logging.Logger;
+
 
 @Profile("secure")
 @EnableWebFluxSecurity
@@ -14,6 +16,7 @@ public class SecurityConfig {
 
     @Bean
     SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+        Logger.getLogger(PosWebJavaApplication.class.getName()).info("==> Security enabled!");
         return http
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS)

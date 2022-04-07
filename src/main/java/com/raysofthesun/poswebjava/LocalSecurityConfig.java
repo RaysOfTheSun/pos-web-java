@@ -8,7 +8,7 @@ import org.springframework.security.web.server.SecurityWebFilterChain;
 
 import java.util.logging.Logger;
 
-@Profile("local")
+@Profile("!secure")
 @EnableWebFluxSecurity
 public class LocalSecurityConfig {
 

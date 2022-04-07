@@ -68,12 +68,12 @@ public abstract class DocumentUploadService<M, U> {
     protected Mono<SimpleSuccessfulDocumentTransaction> deleteDocumentById(String documentId) {
         return this.reactiveGridFsTemplate
                 .delete(this.makeDocumentIdQuery(documentId))
-                .map(unused -> new SimpleSuccessfulDocumentTransaction(documentId));
+                .then(Mono.just(new SimpleSuccessfulDocumentTransaction(documentId)));
     }
 
     protected Mono<U> replaceFileById(String idOfFileToReplace, FilePart replacementFile) {
         return this.reactiveGridFsTemplate
-                .findOne(this.makeDocumentIdQuery(idOfFileToReplace))
+                .findFirst(this.makeDocumentIdQuery(idOfFileToReplace))
                 .map(this::makeDocumentMetadataFromFile)
                 .flatMap(metadata -> this.deleteDocumentById(idOfFileToReplace)
                         .flatMap(deletionIndicator -> {

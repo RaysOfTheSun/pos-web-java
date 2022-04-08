@@ -15,6 +15,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Collection;
+import java.util.logging.Logger;
 
 public abstract class CustomerService implements PosWebService {
     protected final CustomerRepository customerRepository;
@@ -82,11 +83,11 @@ public abstract class CustomerService implements PosWebService {
                 );
     }
 
-    public Flux<ApiApplicationMeta> getApplicationsForCustomer(Market market, String customerId, int pageIndex, String token) {
+    public Flux<ApiApplicationMeta> getApplicationsForCustomer(Market market, String customerId, int pageIndex) {
         return this.applyApplicationsApi.getApplicationsByCustomerId(market, customerId, pageIndex);
     }
 
-    public Mono<Integer> getCustomerApplicationCount(Market market, String customerId, String token) {
+    public Mono<Integer> getCustomerApplicationCount(Market market, String customerId) {
         return this.applyApplicationsApi.getTotalApplicationCountForCustomerById(market, customerId);
     }
 

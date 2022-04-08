@@ -1,7 +1,0 @@
-spring:
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: ${pos-auth.server.url}/auth/realms/pos-web
-          jwk-set-uri: ${pos-auth.server.url}/auth/realms/pos-web/protocol/openid-connect/certs

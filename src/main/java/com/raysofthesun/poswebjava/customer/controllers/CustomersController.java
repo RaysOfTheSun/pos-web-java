@@ -101,19 +101,16 @@ public class CustomersController {
     public Flux<ApiApplicationMeta> getApplicationsForCustomerWithId(@PathVariable String agentId,
                                                                      @PathVariable String customerId,
                                                                      @PathVariable Market market,
-                                                                     @RequestParam int index,
-                                                                     @RequestHeader("Authorization") String token
-    ) {
+                                                                     @RequestParam int index) {
         return this.customerServiceFactory
                 .getServiceForMarket(market)
-                .getApplicationsForCustomer(market, customerId, index, token);
+                .getApplicationsForCustomer(market, customerId, index);
     }
 
     @GetMapping("{market}/{agentId}/customers/{customerId}/application-count")
-    public Mono<Integer> getCustomerApplicationCount(@PathVariable String customerId, @PathVariable Market market,
-                                                     @RequestHeader("Authorization") String authnHeader) {
+    public Mono<Integer> getCustomerApplicationCount(@PathVariable String customerId, @PathVariable Market market) {
         return this.customerServiceFactory
                 .getServiceForMarket(market)
-                .getCustomerApplicationCount(market, customerId, authnHeader);
+                .getCustomerApplicationCount(market, customerId);
     }
 }

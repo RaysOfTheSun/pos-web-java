@@ -3,5 +3,6 @@ spring:
     name: pos
   cloud:
     config:
-      uri: http://localhost:8081
-      label: ${spring.application.name}
+      uri: ${CONFIG_SERVER_URI:http://localhost:8081}
+      label: main
+      fail-fast: true

@@ -6,6 +6,7 @@ import com.raysofthesun.poswebjava.customer.models.Customer;
 import com.raysofthesun.poswebjava.customer.models.CustomerSummary;
 import com.raysofthesun.poswebjava.customer.models.RawCustomer;
 import com.raysofthesun.poswebjava.customer.factories.CustomerServiceFactory;
+import com.raysofthesun.poswebjava.customer.models.SuccessfulCustomerTransaction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
@@ -45,8 +46,8 @@ public class CustomersController {
     }
 
     @PatchMapping("{market}/{agentId}/customers/{customerId}")
-    public Mono<String> updateCustomer(@PathVariable String agentId, @PathVariable Market market,
-                                       @PathVariable String customerId, @RequestBody RawCustomer rawCustomer) {
+    public Mono<SuccessfulCustomerTransaction> updateCustomer(@PathVariable String agentId, @PathVariable Market market,
+                                                              @PathVariable String customerId, @RequestBody RawCustomer rawCustomer) {
         return this.customerServiceFactory
                 .getServiceForMarket(market)
                 .updateCustomer(customerId, agentId, rawCustomer, market);

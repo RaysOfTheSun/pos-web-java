@@ -1,0 +1,6 @@
+spring:
+  application:
+    name: pos
+  cloud:
+    config:
+      enabled: false

@@ -27,6 +27,11 @@ services:
     container_name: "pos-db"
     ports:
       - "27017:27017"
+  pos-java-config:
+    image: docker.io/library/pos-web-config-java
+    container_name: pos-java-config
+    ports:
+      - "3000:8081"
   pos-java:
     build:
       context: ../
@@ -35,6 +40,8 @@ services:
     depends_on:
       - pos-db
       - pos-keycloak
+      - pos-java-config
     container_name: pos-web-java
     environment:
-      SPRING_PROFILES_ACTIVE: docker-local,secure
+      CONFIG_SERVER_URI: http://host.docker.internal:3000
+      SPRING_PROFILES_ACTIVE: dockerized,secure,cor

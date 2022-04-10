@@ -8,6 +8,7 @@ import com.raysofthesun.poswebjava.customer.feign.application.models.ApiApplicat
 import com.raysofthesun.poswebjava.customer.models.Customer;
 import com.raysofthesun.poswebjava.customer.models.CustomerSummary;
 import com.raysofthesun.poswebjava.customer.models.RawCustomer;
+import com.raysofthesun.poswebjava.customer.models.SuccessfulCustomerTransaction;
 import com.raysofthesun.poswebjava.customer.repositories.CustomerRepository;
 import com.raysofthesun.poswebjava.customer.factories.CustomerCreatorServiceFactory;
 import org.springframework.data.domain.PageRequest;
@@ -38,13 +39,13 @@ public abstract class CustomerService implements PosWebService {
                 .map(Customer::getId);
     }
 
-    public Mono<String> updateCustomer(String customerId, String agentId, RawCustomer rawCustomer, Market market) {
+    public Mono<SuccessfulCustomerTransaction> updateCustomer(String customerId, String agentId, RawCustomer rawCustomer, Market market) {
         return this
                 .validateCustomerExistence(customerId, agentId)
                 .map((e) -> this.creatorServiceFactory.getServiceForMarket(market)
-                        .createFromRawCustomer(rawCustomer, agentId, customerId))
+                        .createFromRawCustomer(rawCustomer, customerId, agentId))
                 .flatMap(this.customerRepository::save)
-                .map(Customer::getId);
+                .map((customer -> new SuccessfulCustomerTransaction(customer.getId())));
     }
 
     public Mono<Boolean> toggleCustomerDeletedStatus(String agentId, String customerId, Market market, boolean isDeleted) {

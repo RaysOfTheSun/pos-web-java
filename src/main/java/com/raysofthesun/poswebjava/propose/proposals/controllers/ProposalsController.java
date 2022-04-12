@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.logging.Logger;
+
 @Api(tags = "Proposal Related Processes")
 @RestController
 @RequestMapping("/v1/propose")

@@ -51,7 +51,7 @@ public abstract class ApplicationCreatorService implements PosWebService {
         return this.insuredServiceFactory
                 .getServiceForMarket(Market.COR)
                 .getCustomersAsInsuredsFromRequest(request, agentId, market)
-                .collectMap(Insured::getId)
+                .collectMap(Insured::getCustomerId)
                 .map((insuredIdMap) -> {
                     boolean isPolicyOwnerInsured = request
                             .getPolicyOwnerId()

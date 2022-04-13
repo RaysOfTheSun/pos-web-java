@@ -1,14 +1,2 @@
-spring:
-  application:
-    name: pos
-  data:
-    mongodb:
-      uri: mongodb://localhost:27017/pos
 server:
   port: 9000
-pos-feign:
-  applyServiceBaseUrl: "localhost:${server.port}/v1/apply/"
-  agentServiceBaseUrl: "localhost:${server.port}/v1/agents/"
-pos-auth:
-  server:
-    url: http://localhost:8080

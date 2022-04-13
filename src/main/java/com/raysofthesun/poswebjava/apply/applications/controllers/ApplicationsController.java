@@ -9,6 +9,7 @@ import com.raysofthesun.poswebjava.core.configuration.models.PosDocumentRequirem
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -31,6 +32,7 @@ public class ApplicationsController {
 
     @ApiOperation(value = "Create an Application", notes = "Create an application from a proposal")
     @PostMapping("/{market}/agents/{agentId}/applications/create")
+    @ResponseStatus(HttpStatus.CREATED)
     public Mono<Application> createApplicationWithRequest(@RequestBody ApplicationCreationRequest request,
                                                           @PathVariable String agentId,
                                                           @PathVariable Market market) {
@@ -42,7 +44,6 @@ public class ApplicationsController {
     @ApiOperation(value = "Get Application by ID")
     @GetMapping("/{market}/applications/{applicationId}")
     public Mono<Application> getApplicationById(@PathVariable String applicationId, @PathVariable Market market) {
-        Logger.getAnonymousLogger().info(applicationId);
         return this.serviceFactory
                 .getServiceForMarket(market)
                 .getApplicationById(applicationId, market);

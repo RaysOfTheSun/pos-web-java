@@ -57,7 +57,10 @@ public abstract class ApplyDocumentRequirementService implements PosWebService {
 
         PosDocumentRequirement idDocumentReq = this.getDocumentType(identificationInfoType);
 
-        return List.of(idDocumentReq);
+        List<PosDocumentRequirement> requirementList = new ArrayList<>();
+        requirementList.add(idDocumentReq);
+
+        return requirementList;
     }
 
     public Map<String, List<PosDocumentRequirement>> getRequiredDocsForApplication(ApplicationMeta applicationMeta,

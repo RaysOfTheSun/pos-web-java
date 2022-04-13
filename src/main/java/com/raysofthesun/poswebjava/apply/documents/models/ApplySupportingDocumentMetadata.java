@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ApplicationDocumentMeta {
+public class ApplySupportingDocumentMetadata {
     private String ownerId;
     private boolean isImage;
     private String fileName;

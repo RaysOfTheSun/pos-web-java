@@ -1,6 +1,6 @@
-package com.raysofthesun.poswebjava.apply.documents2.services.marketCor;
+package com.raysofthesun.poswebjava.apply.documents.services.marketCor;
 
-import com.raysofthesun.poswebjava.apply.documents2.services.core.ApplyDocumentRequirementService;
+import com.raysofthesun.poswebjava.apply.documents.services.core.ApplyDocumentRequirementService;
 import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.core.configuration.models.PosConfig;
 import org.springframework.stereotype.Service;

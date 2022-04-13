@@ -1,6 +1,6 @@
-package com.raysofthesun.poswebjava.apply.documents2.services.marketCor;
+package com.raysofthesun.poswebjava.apply.documents.services.marketCor;
 
-import com.raysofthesun.poswebjava.apply.documents2.services.core.ApplyDocumentUploadService;
+import com.raysofthesun.poswebjava.apply.documents.services.core.ApplyDocumentUploadService;
 import com.raysofthesun.poswebjava.core.common.enums.Market;
 import org.springframework.data.mongodb.gridfs.ReactiveGridFsTemplate;
 import org.springframework.stereotype.Service;

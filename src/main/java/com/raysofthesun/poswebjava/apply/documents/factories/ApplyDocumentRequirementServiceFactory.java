@@ -1,6 +1,6 @@
-package com.raysofthesun.poswebjava.apply.documents2.factories;
+package com.raysofthesun.poswebjava.apply.documents.factories;
 
-import com.raysofthesun.poswebjava.apply.documents2.services.core.ApplyDocumentRequirementService;
+import com.raysofthesun.poswebjava.apply.documents.services.core.ApplyDocumentRequirementService;
 import com.raysofthesun.poswebjava.core.common.factories.PosWebServiceFactory;
 import org.springframework.stereotype.Component;
 

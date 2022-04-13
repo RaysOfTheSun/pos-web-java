@@ -1,8 +1,8 @@
-package com.raysofthesun.poswebjava.apply.documents2.controllers;
+package com.raysofthesun.poswebjava.apply.documents.controllers;
 
-import com.raysofthesun.poswebjava.apply.documents2.factories.ApplyDocumentsServiceFactory;
-import com.raysofthesun.poswebjava.apply.documents2.models.ApplySupportingDocumentMetadata;
-import com.raysofthesun.poswebjava.apply.documents2.models.SuccessfulApplyDocumentTransaction;
+import com.raysofthesun.poswebjava.apply.documents.factories.ApplyDocumentsServiceFactory;
+import com.raysofthesun.poswebjava.apply.documents.models.ApplySupportingDocumentMetadata;
+import com.raysofthesun.poswebjava.apply.documents.models.SuccessfulApplyDocumentTransaction;
 import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.core.configuration.models.PosDocumentRequirement;
 import com.raysofthesun.poswebjava.core.document.models.SimpleSuccessfulDocumentTransaction;

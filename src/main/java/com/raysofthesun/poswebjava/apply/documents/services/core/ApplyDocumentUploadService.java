@@ -1,9 +1,9 @@
-package com.raysofthesun.poswebjava.apply.documents2.services.core;
+package com.raysofthesun.poswebjava.apply.documents.services.core;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
 import com.raysofthesun.poswebjava.apply.documents.mappers.DocumentMapper;
-import com.raysofthesun.poswebjava.apply.documents2.models.ApplySupportingDocumentMetadata;
-import com.raysofthesun.poswebjava.apply.documents2.models.SuccessfulApplyDocumentTransaction;
+import com.raysofthesun.poswebjava.apply.documents.models.ApplySupportingDocumentMetadata;
+import com.raysofthesun.poswebjava.apply.documents.models.SuccessfulApplyDocumentTransaction;
 import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import com.raysofthesun.poswebjava.core.document.services.DocumentUploadService;
 import org.bson.types.ObjectId;

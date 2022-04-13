@@ -1,4 +1,4 @@
-package com.raysofthesun.poswebjava.apply.documents2.models;
+package com.raysofthesun.poswebjava.apply.documents.models;
 
 import com.raysofthesun.poswebjava.core.document.models.SimpleSuccessfulDocumentTransaction;
 import lombok.Getter;

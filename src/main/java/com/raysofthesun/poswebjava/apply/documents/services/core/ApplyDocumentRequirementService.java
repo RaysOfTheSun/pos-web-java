@@ -1,4 +1,4 @@
-package com.raysofthesun.poswebjava.apply.documents2.services.core;
+package com.raysofthesun.poswebjava.apply.documents.services.core;
 
 import com.raysofthesun.poswebjava.apply.applications.emums.ApplicationPaymentMethod;
 import com.raysofthesun.poswebjava.apply.applications.models.core.application.ApplicationMeta;

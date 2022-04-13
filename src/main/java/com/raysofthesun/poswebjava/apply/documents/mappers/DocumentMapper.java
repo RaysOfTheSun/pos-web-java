@@ -1,8 +1,7 @@
 package com.raysofthesun.poswebjava.apply.documents.mappers;
 
 import com.mongodb.client.gridfs.model.GridFSFile;
-import com.raysofthesun.poswebjava.apply.documents.models.ApplicationDocumentMeta;
-import com.raysofthesun.poswebjava.apply.documents2.models.ApplySupportingDocumentMetadata;
+import com.raysofthesun.poswebjava.apply.documents.models.ApplySupportingDocumentMetadata;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;

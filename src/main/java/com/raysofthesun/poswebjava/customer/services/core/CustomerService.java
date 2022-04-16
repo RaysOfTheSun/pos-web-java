@@ -49,7 +49,7 @@ public abstract class CustomerService implements PosWebService {
     }
 
     public Mono<Boolean> toggleCustomerDeletedStatus(String agentId, String customerId, Market market, boolean isDeleted) {
-        return this.customerRepository.findByIdAndAgentId(agentId, customerId)
+        return this.customerRepository.findByIdAndAgentId(customerId, agentId)
                 .switchIfEmpty(Mono.error(new CustomerNotFoundException()))
                 .map(customer -> this.creatorServiceFactory
                         .getServiceForMarket(market)

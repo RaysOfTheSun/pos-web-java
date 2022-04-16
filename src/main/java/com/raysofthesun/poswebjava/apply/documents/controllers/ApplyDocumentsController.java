@@ -72,7 +72,9 @@ public class ApplyDocumentsController {
     @GetMapping("/{market}/documents/{documentId}")
     public Flux<Void> getDocumentResourceById(@PathVariable String documentId, @PathVariable Market market,
                                               @ApiIgnore ServerWebExchange exchange) {
-        return this.serviceFactory.getServiceForMarket(market).getDocumentResourceById(documentId, exchange, market);
+        return this.serviceFactory
+                .getServiceForMarket(market).getDocumentResourceById(documentId, exchange, market)
+                .flatMapMany(fsResource -> exchange.getResponse().writeWith(fsResource.getDownloadStream()));
     }
 
 

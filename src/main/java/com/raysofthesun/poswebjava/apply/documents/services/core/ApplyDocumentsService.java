@@ -11,6 +11,7 @@ import com.raysofthesun.poswebjava.core.common.enums.Market;
 import com.raysofthesun.poswebjava.core.common.services.PosWebService;
 import com.raysofthesun.poswebjava.core.configuration.models.PosDocumentRequirement;
 import com.raysofthesun.poswebjava.core.document.models.SimpleSuccessfulDocumentTransaction;
+import org.springframework.data.mongodb.gridfs.ReactiveGridFsResource;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Flux;
@@ -70,10 +71,9 @@ public abstract class ApplyDocumentsService implements PosWebService {
                 .getDocumentMetadata(query(where("metadata.ownerId").is(ownerId)));
     }
 
-    public Flux<Void> getDocumentResourceById(String documentId, ServerWebExchange exchange, Market market) {
+    public Mono<ReactiveGridFsResource> getDocumentResourceById(String documentId, ServerWebExchange exchange, Market market) {
         return this.documentUploadServiceFactory.getServiceForMarket(market)
-                .getDocumentResourceById(documentId)
-                .flatMapMany(fsResource -> exchange.getResponse().writeWith(fsResource.getDownloadStream()));
+                .getDocumentResourceById(documentId);
     }
 
     public Flux<SimpleSuccessfulDocumentTransaction> deleteDocumentsById(Collection<String> documentIds, Market market) {

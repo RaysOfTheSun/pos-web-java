@@ -64,7 +64,7 @@ public abstract class ApplicationInsuredService implements PosWebService {
                     customerAsInsured.setRole(customerAsInsuredRole);
 
                     return customerAsInsured;
-                });
+                }).flatMap(insuredRepository::save);
     }
 
     protected InsuredRole getInsuredRoleByRequest(ApplicationCreationRequest request, String customerId) {

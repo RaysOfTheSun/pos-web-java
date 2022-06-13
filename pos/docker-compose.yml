@@ -7,17 +7,13 @@ services:
       POSTGRES_USER: pos
       POSTGRES_HOST_AUTH_METHOD: trust
   pos-keycloak:
-    image: jboss/keycloak
+    image: bitnami/keycloak
     environment:
-      DB_USER: pos
-      DB_ADDR: pos-postgres
-      DB_VENDOR: postgres
-      DB_DATABASE: pos_agents
-      KEYCLOAK_USER: admin
-      ROOT_LOGLEVEL: DEBUG
-      KEYCLOAK_PASSWORD: admin
-      KEYCLOAK_LOGLEVEL: DEBUG
-      PROXY_ADDRESS_FORWARDING: "true"
+      KEYCLOAK_ADMIN_USER: admin
+      KEYCLOAK_DATABASE_HOST: pos-postgres
+      KEYCLOAK_DATABASE_USER: pos
+      KEYCLOAK_DATABASE_NAME: pos_agents
+      KEYCLOAK_ADMIN_PASSWORD: admin
     ports:
       - "8080:8080"
     depends_on:

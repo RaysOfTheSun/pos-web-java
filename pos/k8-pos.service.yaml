@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: pos-backing
   labels:
-    ap.app: POS_BACKING
+    app: BACKING
 spec:
-  replicas: 3
+  replicas: 1
   selector:
     matchLabels:
-      ap.app: POS_BACKING
+      app: BACKING
   template:
     metadata:
       labels:
-        ap.app: POS_BACKING
+        app: BACKING
     spec:
       containers:
         - name: pos-config-java
@@ -24,12 +24,10 @@ spec:
           image: bitnami/keycloak
           env:
             - name: KEYCLOAK_DATABASE_HOST
-              value: 127.0.0.1:5432
+              value: localhost
             - name: KEYCLOAK_DATABASE_NAME
               value: pos_agents
-            - name: KEYCLOAK_USER
-              value: admin
-            - name: KEYCLOAK_PASSWORD
+            - name: KEYCLOAK_ADMIN_PASSWORD
               value: admin
             - name: KEYCLOAK_ADMIN_USER
               value: admin
@@ -58,9 +56,9 @@ kind: Service
 metadata:
   name: pos-backing-service
 spec:
-  selector:
-    ap.app: POS_BACKING
   type: LoadBalancer
+  selector:
+    app: BACKING
   ports:
     - targetPort: 8080
       port: 8080
@@ -68,7 +66,45 @@ spec:
     - targetPort: 8081
       port: 8081
       name: config-server
-#    - targetPort: 5432
-#      port: 5432
-#      name: pos-postgres
-#      protocol: TCP
+    - targetPort: 5432
+      port: 5432
+      name: pos-postgres
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pos-multi
+spec:
+  selector:
+    matchLabels:
+      app: pos-multi
+  template:
+    metadata:
+      labels:
+        app: pos-multi
+    spec:
+      containers:
+        - name: pos-java-primary
+          image: docker.io/library/pos-java
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 9000
+          env:
+            - name: CONFIG_SERVER_URI
+              value: http://pos-backing-service:8081
+            - name: SPRING_PROFILES_ACTIVE
+              value: dockerized,secure,cor
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pos-primary-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: pos-multi
+  ports:
+    - port: 9000
+      targetPort: 9000
+      name: pos-primary
+
